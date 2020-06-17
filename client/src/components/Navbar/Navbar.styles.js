@@ -1,25 +1,31 @@
 import styled from "styled-components";
-import {Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 export const NavbarContainer = styled.div`
   background-color: #ffffff;
-  height: 3rem;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: sticky;
   top: 0;
-  padding: 0 6rem;
+  padding: 0 128px;
   font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  margin-bottom: 48px;
   box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.1);
-  @media (max-width: 600px){
-    padding: 0 0.5rem;
+  @media (max-width: 600px) {
+    padding: 0 8px;
   }
 `;
 
 export const BrandContainer = styled.div`
-  font-size: 20px;
+  font-size: 21px;
+  font-weight: 500;
   cursor: pointer;
+  & > span {
+    color: ${(props) => props.theme.primaryText};
+  }
 `;
 
 export const Menu = styled.div`
@@ -29,7 +35,7 @@ export const Menu = styled.div`
 export const MenuItem = styled.div`
   font-size: 14px;
   text-decoration: none;
-  margin-right: 1rem;
+  margin-right: 16px;
   &:last-child {
     margin-right: 0;
   }
@@ -38,5 +44,7 @@ export const MenuItem = styled.div`
 
 export const MenuLink = styled(Link)`
   text-decoration: none;
-  color: ${(props) => props.active && props.theme.primaryText};
-`
+  font-weight: 400;
+  color: ${(props) =>
+    props.active ? props.theme.primaryText : props.theme.secondaryText};
+`;

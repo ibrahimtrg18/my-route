@@ -10,7 +10,7 @@ import {
 const Navbar = (props) => {
   return (
     <NavbarContainer>
-      <BrandContainer>Myroute.</BrandContainer>
+      <BrandContainer><span>My</span>route.</BrandContainer>
       <Menu>
         <MenuItem>
           <MenuLink active={props.home && props.home} to="/">Home</MenuLink>

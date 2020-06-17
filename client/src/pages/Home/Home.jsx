@@ -1,12 +1,67 @@
 import React from "react";
-import { HomeContainer } from "./Home.styles";
+import {
+  HomeContainer,
+  HeroContainer,
+  HeroContent,
+  Banner,
+  Title,
+  Paragraph,
+  Image,
+  FeatureContainer,
+  FeatureTitle,
+  FeatureList,
+  FeatureItem,
+  FeatureImage,
+  FeatureParagraph,
+} from "./Home.styles";
 import Navbar from "../../components/Navbar/Navbar";
+import Footer from "../../components/Footer/Footer";
+import { PrimaryButton } from "../../components/Button/Button.styles";
 
 const Home = () => {
+  const featuresItems = () => {
+    let features = [];
+
+    for (let i = 0; i < 6; i++) {
+      features.push(
+        <FeatureItem>
+          <FeatureImage
+            src={require("../../assets/images/feature1.png")}
+          ></FeatureImage>
+          <FeatureParagraph>
+            We provide what you need to improve your business it's time to make
+            your business more powerful
+          </FeatureParagraph>
+        </FeatureItem>
+      );
+    }
+
+    return features;
+  };
+
   return (
     <>
       <Navbar home={true} />
-      <HomeContainer>Home</HomeContainer>
+      <HomeContainer>
+        <HeroContainer>
+          <HeroContent>
+            <Title>make your business more powerful</Title>
+            <Paragraph>
+              We provide what you need to improve your business it's time to
+              make your business more powerful
+            </Paragraph>
+            <PrimaryButton>Show Me Now</PrimaryButton>
+          </HeroContent>
+          <Banner>
+            <Image src={require("../../assets/images/route1.png")}></Image>
+          </Banner>
+        </HeroContainer>
+        <FeatureContainer>
+          <FeatureTitle>Our Features</FeatureTitle>
+          <FeatureList>{featuresItems()}</FeatureList>
+        </FeatureContainer>
+      </HomeContainer>
+      <Footer />
     </>
   );
 };
