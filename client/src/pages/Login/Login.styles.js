@@ -64,9 +64,10 @@ export const Input = styled.input`
   border-color: transparent;
   border-radius: 4px;
   width: 100%;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   height: 32px;
   font-size: 14px;
+  padding: 0 8px;
 `;
 
 export const AfterContent = styled.div`

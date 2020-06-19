@@ -16,10 +16,10 @@ const Navbar = (props) => {
           <MenuLink active={props.home && props.home} to="/">Home</MenuLink>
         </MenuItem>
         <MenuItem>
-          <MenuLink active={props.login && props.login} to="/login">Sign In</MenuLink>
+          <MenuLink active={props.login && props.login} to="/login">Login</MenuLink>
         </MenuItem>
         <MenuItem>
-          <MenuLink active={props.register && props.register} to="/register">Sign Up</MenuLink>
+          <MenuLink active={props.register && props.register} to="/register">Register</MenuLink>
         </MenuItem>
       </Menu>
     </NavbarContainer>

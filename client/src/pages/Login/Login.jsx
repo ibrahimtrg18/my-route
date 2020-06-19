@@ -18,17 +18,17 @@ import {
   SecondaryButton,
 } from "../../components/Button/Button.styles";
 
-const SignIn = () => {
+const Login = () => {
   return (
     <>
       <Navbar login={true} />
       <LoginContainer>
         <HeaderContainer>
-          <Title>Sign in</Title>
+          <Title>Login</Title>
           <Paragraph>Please fill up the blank fields below</Paragraph>
         </HeaderContainer>
         <ContentContainer>
-          <Image src={require("../../assets/images/authentication.png")} />
+          <Image src={require("../../assets/images/login.png")} />
           <Divider />
           <Form>
             <Label>
@@ -42,15 +42,15 @@ const SignIn = () => {
           </Form>
         </ContentContainer>
         <AfterContent>
-          <PrimaryButton px={8} py={64} mb={16}>Sign in</PrimaryButton>
+          <PrimaryButton px={8} py={74} mb={16}>Login</PrimaryButton>
           <Paragraph>
             Don't have account ?
           </Paragraph>
-          <SecondaryButton px={8} py={64} mt={16} mb={16}>Sign up</SecondaryButton>
+          <SecondaryButton px={8} py={64} mt={16} mb={16}>Register</SecondaryButton>
         </AfterContent>
       </LoginContainer>
     </>
   );
 };
 
-export default SignIn;
+export default Login;
