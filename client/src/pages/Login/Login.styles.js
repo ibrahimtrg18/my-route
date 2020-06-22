@@ -52,6 +52,7 @@ export const Form = styled.form`
 `;
 
 export const Label = styled.label`
+  font-size: 14px;
   display: block;
   color: ${(props) => props.theme.secondaryText};
 `;

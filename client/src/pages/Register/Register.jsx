@@ -50,11 +50,13 @@ const Signup = () => {
           </Form>
         </ContentContainer>
         <AfterContent>
-          <PrimaryButton px={8} py={64} mb={16}>Register</PrimaryButton>
-          <Paragraph>
-            Already have account ?
-          </Paragraph>
-          <SecondaryButton px={8} py={74} mt={16} mb={16}>Login</SecondaryButton>
+          <PrimaryButton px={8} py={64} mb={16}>
+            Register
+          </PrimaryButton>
+          <Paragraph>Already have account ?</Paragraph>
+          <SecondaryButton px={8} py={74} mt={16} mb={16}>
+            Login
+          </SecondaryButton>
         </AfterContent>
       </SignupContainer>
     </>
