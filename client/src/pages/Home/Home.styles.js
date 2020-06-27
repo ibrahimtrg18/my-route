@@ -13,30 +13,33 @@ export const HeroContainer = styled.div`
   font-family: "Poppins", sans-serif;
   margin-bottom: 48px;
   @media (max-width: 600px) {
-    display: block;
+    margin-bottom: 32px;
   }
 `;
 
 export const HeroContent = styled.div`
   float: left;
   width: 35%;
+  margin-top: 16px;
   @media (max-width: 600px) {
     width: 100%;
   }
-  margin-bottom: 48px;
 `;
 
 export const Title = styled.h1`
   font-weight: 800;
   margin-bottom: 8px;
-  color: ${(props) => props.theme.secondaryText};
+  color: ${(props) => props.theme.secondaryColor};
 `;
 
 export const Paragraph = styled.p`
-  color: ${(props) => props.theme.tertiaryText};
-  font-weight: 200;
+  color: ${(props) => props.theme.tertiaryColor};
+  font-weight: 300;
   margin-bottom: 32px;
   font-size: 16px;
+  @media (max-width: 600px) {
+    margin-bottom: 16px;
+  }
 `;
 
 export const Banner = styled.div`
@@ -46,7 +49,6 @@ export const Banner = styled.div`
 export const Image = styled.img`
   width: 90%;
   box-shadow: 10px 10px 1px 1px rgb(0, 0, 0, 0.1);
-
   @media (max-width: 600px) {
     display: none;
   }
@@ -58,7 +60,7 @@ export const FeatureContainer = styled.div`
 `;
 
 export const FeatureTitle = styled.h2`
-  color: ${(props) => props.theme.secondaryText};
+  color: ${(props) => props.theme.secondaryColor};
   font-weight: 500;
   margin-bottom: 32px;
 `;
@@ -70,6 +72,7 @@ export const FeatureList = styled.div`
   grid-row-gap: 48px;
   @media (max-width: 600px) {
     grid-template-columns: auto;
+    grid-row-gap: 16px;
   }
 `;
 
@@ -89,7 +92,7 @@ export const FeatureImage = styled.img`
 `;
 
 export const FeatureParagraph = styled.p`
-  color: ${(props) => props.theme.tertiaryText};
-  font-weight: 200;
-  font-size: 16px;
+  color: ${(props) => props.theme.tertiaryColor};
+  font-weight: 300;
+  font-size: 14px;
 `;

@@ -16,7 +16,6 @@ import {
 } from "./Home.styles";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import { PrimaryButton } from "../../components/Button/Button.styles";
 
 const Home = () => {
   const featuresItems = () => {
@@ -50,7 +49,6 @@ const Home = () => {
               We provide what you need to improve your business it's time to
               make your business more powerful
             </Paragraph>
-            <PrimaryButton>Show Me Now</PrimaryButton>
           </HeroContent>
           <Banner>
             <Image src={require("../../assets/images/route1.png")}></Image>

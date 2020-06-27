@@ -23,7 +23,7 @@ export const MenuLink = styled(Link)`
   border-radius: 16px;
   padding: 8px 14px;
   color: ${(props) =>
-    props.active ? props.theme.lightText : props.theme.secondaryText};
+    props.active ? props.theme.whiteColor : props.theme.secondaryColor};
   background-color: ${(props) =>
     props.active ? props.theme.primaryButton : "transparent"};
 `;
