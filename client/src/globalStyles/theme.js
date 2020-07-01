@@ -5,6 +5,7 @@ const theme = {
   secondaryDarkColor: "#102246",
   tertiaryColor: "#B0B0B0",
   tertiaryDarkColor: "#A3A3A3",
+  dangerColor: "#EE204D",
   whiteColor: "#FFFFFF",
   darkColor: "#393939",
   inputBackground: "#F5F6F8",
@@ -12,8 +13,8 @@ const theme = {
   secondaryBackground: "#ECECEC",
   primaryButton: "#3252DF",
   primaryDarkButton: "#182E94",
-  secondaryButton: "#F5F6F8",
-  secondaryDarkButton: "#E6E9EE",
+  secondaryButton: "#ffffff",
+  secondaryDarkButton: "#F2F2F2",
   boxShadowPrimaryButton: "0px 2px 8px 1px rgba(0, 0, 0, 0.3);",
   boxShadowSecondaryButton: "0px 0px 3px 0px rgba(0, 0, 0, 0.3);",
 };

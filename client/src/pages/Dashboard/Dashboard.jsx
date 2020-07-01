@@ -22,7 +22,7 @@ import Menu from "../../components/Menu/Menu";
 import EmployeeRoute from "../../components/EmployeeRoute/EmployeeRoute";
 
 const Dashboard = () => {
-  const [employees, setEmployees] = useState([
+  const [employees] = useState([
     {
       avatar: "../../assets/images/avatar.png",
       name: "Ibrahim Tarigan",

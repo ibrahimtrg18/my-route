@@ -11,7 +11,7 @@ import LoginForm from "../../components/LoginForm/LoginForm";
 const Login = () => {
   return (
     <>
-      <Navbar login={true} />
+      <Navbar login={1} />
       <LoginContainer>
         <HeaderContainer>
           <Title>Login</Title>

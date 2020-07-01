@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const RegisterFormContainer = styled.div`
   display: grid;
   grid-template-columns: 40% 20% 40%;
-  margin-bottom: 32px;
   @media (max-width: 600px) {
     grid-template-columns: auto;
     padding: 0 32px;
@@ -37,23 +36,34 @@ export const Label = styled.label`
   font-weight: 500;
   display: block;
   color: ${(props) => props.theme.secondaryColor};
+  margin-bottom: 20px;
+  & > span {
+    font-size: 11px;
+    font-weight: 300;
+    color: ${(props) => props.theme.dangerColor};
+  }
 `;
 
 export const Input = styled.input`
   display: block;
-  color: ${(props) => props.theme.secondaryColor};
   background-color: ${(props) => props.theme.inputBackground};
   font-family: "Poppins", sans-serif;
   border-color: transparent;
   border-radius: 4px;
   width: 100%;
-  margin-bottom: 20px;
   height: 32px;
   font-size: 14px;
   padding: 0 8px;
   &:focus {
     border: solid 2px ${(props) => props.theme.primaryButton};
     background-color: ${(props) => props.theme.primaryBackground};
+  }
+`;
+
+export const Actions = styled.div`
+  grid-column: 1 / span 3;
+  @media (max-width: 600px) {
+    grid-column: 1 / span 1;
   }
 `;
 
@@ -90,11 +100,4 @@ export const Paragraph = styled.p`
   color: ${(props) => props.theme.tertiaryColor};
   font-weight: 300;
   font-size: 16px;
-`;
-
-export const Buttons = styled.div`
-  grid-column: 1 / span 3;
-  @media (max-width: 600px) {
-    grid-column: 1 / span 1;
-  }
 `;

@@ -11,7 +11,7 @@ import RegisterForm from "../../components/RegisterForm/RegisterForm";
 const Signup = () => {
   return (
     <>
-      <Navbar register={true} />
+      <Navbar register={1} />
       <SignupContainer>
         <HeaderContainer>
           <Title>Register</Title>

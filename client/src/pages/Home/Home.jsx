@@ -23,7 +23,7 @@ const Home = () => {
 
     for (let i = 0; i < 6; i++) {
       features.push(
-        <FeatureItem>
+        <FeatureItem key={i}>
           <FeatureImage
             src={require("../../assets/images/feature1.png")}
           ></FeatureImage>
@@ -40,7 +40,7 @@ const Home = () => {
 
   return (
     <>
-      <Navbar home={true} />
+      <Navbar home={1} />
       <HomeContainer>
         <HeroContainer>
           <HeroContent>

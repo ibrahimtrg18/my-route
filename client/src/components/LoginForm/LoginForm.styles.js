@@ -38,17 +38,21 @@ export const Label = styled.label`
   font-weight: 500;
   display: block;
   color: ${(props) => props.theme.secondaryColor};
+  margin-bottom: 20px;
+  & > span {
+    font-size: 11px;
+    font-weight: 300;
+    color: ${(props) => props.theme.dangerColor};
+  }
 `;
 
 export const Input = styled.input`
   display: block;
-  color: ${(props) => props.theme.secondaryColor};
   background-color: ${(props) => props.theme.inputBackground};
   font-family: "Poppins", sans-serif;
   border-color: transparent;
   border-radius: 4px;
   width: 100%;
-  margin-bottom: 24px;
   height: 32px;
   font-size: 14px;
   padding: 0 8px;
@@ -65,7 +69,7 @@ export const Paragraph = styled.p`
   font-size: 16px;
 `;
 
-export const Buttons = styled.div`
+export const Actions = styled.div`
   grid-column: 1 / span 3;
   @media (max-width: 600px) {
     grid-column: 1 / span 1;

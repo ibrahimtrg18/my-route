@@ -49,6 +49,7 @@ export const Banner = styled.div`
 export const Image = styled.img`
   width: 90%;
   box-shadow: 10px 10px 1px 1px rgb(0, 0, 0, 0.1);
+  float: right;
   @media (max-width: 600px) {
     display: none;
   }
