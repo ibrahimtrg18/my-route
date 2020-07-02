@@ -4,7 +4,6 @@ export const LoginFormContainer = styled.div`
   display: grid;
   grid-template-columns: 40% 20% 40%;
   margin-bottom: 32px;
-  height: 300px;
   @media (max-width: 600px) {
     grid-template-columns: auto;
     padding: 0 32px;

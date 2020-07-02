@@ -1,11 +1,8 @@
 import styled from "styled-components";
-import { EmployeeRouteContainer } from "../../components/EmployeeRoute/EmployeeRoute.styles";
 
-export const DashboardContainer = styled.div`
+export const EmployeeContainer = styled.div`
   display: flex;
   background-color: ${(props) => props.theme.secondaryBackground};
-  ${EmployeeRouteContainer} {
-  }
 `;
 
 export const LeftSide = styled.div`
@@ -83,7 +80,7 @@ export const Button = styled.button`
 
 export const EmployeeList = styled.div``;
 
-export const Employee = styled.div`
+export const EmployeeCard = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: 10% 30% 30% 10% 10% 10%;
@@ -124,8 +121,8 @@ export const Name = styled.div``;
 
 export const CustomId = styled.div``;
 
-export const Date = styled.div``;
+export const Status = styled.div``;
 
-export const Time = styled.div``;
+export const TotalRoute = styled.div``;
 
-export const Distance = styled.div``;
+export const TotalDistance = styled.div``;

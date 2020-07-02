@@ -5,7 +5,7 @@ import {
   HeaderContainer,
   Brand,
   BannerContainer,
-  Image,
+  Banner,
   Button,
   EmployeeList,
   Employee,
@@ -48,9 +48,7 @@ const Dashboard = () => {
       distance: 44,
     },
   ]);
-
   const [employee, setEmployee] = useState({});
-
   const handleEmployeeClick = (employee) => {
     setEmployee(employee);
     console.log(employee);
@@ -67,7 +65,7 @@ const Dashboard = () => {
             <Menu dashboard={1} />
           </HeaderContainer>
           <BannerContainer>
-            <Image src={require("../../assets/images/dashboard.png")} />
+            <Banner src={require("../../assets/images/dashboard.png")}></Banner>
             <Button>
               Add new route <Add width={21} height={21} />
             </Button>

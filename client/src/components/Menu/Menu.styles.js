@@ -12,6 +12,14 @@ export const MenuList = styled.ul`
 export const MenuItem = styled.li`
   white-space: nowrap;
   margin-right: 64px;
+  border-radius: 16px;
+  padding: 8px 14px;
+  background-color: ${(props) =>
+    props.active ? props.theme.primaryButton : "transparent"};
+  & > a {
+    color: ${(props) =>
+      props.active ? props.theme.whiteColor : props.theme.secondaryColor};
+  }
   @media (max-width: 600px) {
     margin-right: 24px;
   }
@@ -20,10 +28,4 @@ export const MenuItem = styled.li`
 export const MenuLink = styled(Link)`
   text-decoration: none;
   font-size: 14px;
-  border-radius: 16px;
-  padding: 8px 14px;
-  color: ${(props) =>
-    props.active ? props.theme.whiteColor : props.theme.secondaryColor};
-  background-color: ${(props) =>
-    props.active ? props.theme.primaryButton : "transparent"};
 `;

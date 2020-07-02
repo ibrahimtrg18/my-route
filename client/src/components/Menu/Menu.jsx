@@ -5,25 +5,17 @@ const Menu = (props) => {
   return (
     <MenuContainer>
       <MenuList>
-        <MenuItem>
-          <MenuLink active={props.dashboard && props.dashboard} to="/dashboard">
-            On Progress
-          </MenuLink>
+        <MenuItem active={props.dashboard && props.dashboard}>
+          <MenuLink to="/dashboard">On Progress</MenuLink>
         </MenuItem>
-        <MenuItem>
-          <MenuLink active={props.history && props.history} to="/history">
-            History
-          </MenuLink>
+        <MenuItem active={props.history && props.history}>
+          <MenuLink to="/history">History</MenuLink>
         </MenuItem>
-        <MenuItem>
-          <MenuLink active={props.employee && props.employee} to="/employee">
-            Employee
-          </MenuLink>
+        <MenuItem active={props.employee && props.employee}>
+          <MenuLink to="/employee">Employee</MenuLink>
         </MenuItem>
-        <MenuItem>
-          <MenuLink active={props.settings && props.settings} to="/settings">
-            Settings
-          </MenuLink>
+        <MenuItem active={props.settings && props.settings}>
+          <MenuLink to="/settings">Settings</MenuLink>
         </MenuItem>
       </MenuList>
     </MenuContainer>
