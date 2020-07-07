@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik } from "formik";
+import axios from "axios";
 import * as yup from "yup";
 import {
   RegisterFormContainer,
@@ -16,7 +17,7 @@ import {
 const validationSchema = yup.object().shape({
   businessName: yup.string().required(),
   email: yup.string().email().required(),
-  phone: yup
+  phoneNumber: yup
     .string()
     .required()
     .matches(/^[0-9]+$/, "Must be only digits & no-space")
@@ -26,6 +27,8 @@ const validationSchema = yup.object().shape({
 });
 
 const RegisterForm = () => {
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState(0);
   return (
     <>
       <RegisterFormContainer>
@@ -35,16 +38,27 @@ const RegisterForm = () => {
           initialValues={{
             businessName: "",
             email: "",
-            phone: "",
+            phoneNumber: "",
             password: "",
           }}
           validationSchema={validationSchema}
-          onSubmit={(data) => {
-            console.log(data);
+          onSubmit={async (data) => {
+            try {
+              const response = await axios.post(
+                `http://localhost:4000/api/business/register`,
+                data
+              );
+              setMessage(response.data.message);
+              setStatus(1);
+            } catch (err) {
+              setMessage(err.response.data.message);
+              setStatus(0);
+            }
           }}
         >
           {({ values, errors, touched, handleChange, handleSubmit }) => (
-            <Form id="register-form" onSubmit={handleSubmit}>
+            <Form id="register-form" onSubmit={handleSubmit} status={status}>
+              <span>{message && message}</span>
               <Label>
                 Business Name
                 <Input
@@ -74,13 +88,17 @@ const RegisterForm = () => {
               <Label>
                 Phone Number
                 <Input
-                  name="phone"
+                  name="phoneNumber"
                   type="tel"
-                  value={values.phone}
+                  value={values.phoneNumber}
                   onChange={handleChange}
                   autoComplete="off"
                 />
-                <span>{errors.phone && touched.phone && errors.phone}</span>
+                <span>
+                  {errors.phoneNumber &&
+                    touched.phoneNumber &&
+                    errors.phoneNumber}
+                </span>
               </Label>
               <Label>
                 Password

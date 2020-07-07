@@ -1,11 +1,10 @@
 import styled from "styled-components";
-import { EmployeeRouteContainer } from "../../components/EmployeeRoute/EmployeeRoute.styles";
 
-export const DashboardContainer = styled.div`
+export const HistoryContainer = styled.div`
   display: flex;
   background-color: ${(props) => props.theme.secondaryBackground};
-  ${EmployeeRouteContainer} {
-  }
+  min-height: 100vh;
+  height: auto;
 `;
 
 export const LeftSide = styled.div`
@@ -36,54 +35,30 @@ export const Brand = styled.div`
   }
 `;
 
-export const ContentContainer = styled.div``;
-
-export const BannerContainer = styled.div`
-  width: 100%;
-  height: auto;
-  position: relative;
+export const DatePickerContainer = styled.div`
   margin-bottom: 32px;
-  @media (max-width: 600px) {
-    margin-bottom: 16px;
-  }
 `;
 
-export const Banner = styled.img`
-  width: 100%;
-  text-align: center;
-  @media (max-width: 600px) {
-    display: none;
-  }
-`;
-
-export const Button = styled.button`
-  position: absolute;
-  left: 24px;
-  bottom: 24px;
-  background-color: ${(props) => props.theme.primaryButton};
-  box-shadow: ${(props) => props.theme.boxShadowButton};
-  font-family: "Poppins", sans-serif;
-  color: ${(props) => props.theme.whiteColor};
-  font-weight: 500;
-  padding: ${(props) => (props.px ? props.px : 8)}px
-    ${(props) => (props.py ? props.py : 16)}px;
-  border-color: transparent;
-  border-radius: 16px;
-  cursor: pointer;
-  font-size: 14px;
+export const ButtonDatePicker = styled.button`
   display: flex;
   align-items: center;
+  border: transparent;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 400;
+  background-color: ${(props) => props.theme.whiteColor};
+  color: ${(props) => props.theme.darkColor};
+  border-radius: 8px;
+  align-items: center;
+  cursor: pointer;
   & > svg {
-    margin-left: 8px;
-  }
-  @media (max-width: 600px) {
-    position: static;
+    margin-right: 8px;
   }
 `;
 
-export const EmployeeList = styled.div``;
+export const EmployeeListContainer = styled.div``;
 
-export const Employee = styled.div`
+export const EmployeeContainer = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: 10% 30% 30% 10% 10% 10%;
@@ -95,7 +70,7 @@ export const Employee = styled.div`
   font-size: 14px;
   padding: 4px 8px;
   margin-bottom: 16px;
-  border-radius: 16px;
+  border-radius: 8px;
   cursor: pointer;
   &:hover {
     background-color: ${(props) =>
@@ -113,19 +88,19 @@ export const Employee = styled.div`
   }
 `;
 
-export const Avatar = styled.img`
-  border-radius: 16px;
+export const EmployeeImg = styled.img`
+  border-radius: 8px;
   background-color: ${(props) => props.theme.secondaryBackground};
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
 `;
 
-export const Name = styled.div``;
+export const EmployeeName = styled.div``;
 
-export const CustomId = styled.div``;
+export const EmployeeCustomId = styled.div``;
 
-export const Date = styled.div``;
+export const EmployeeDate = styled.div``;
 
-export const Time = styled.div``;
+export const EmployeeTime = styled.div``;
 
-export const Distance = styled.div``;
+export const EmployeeDistance = styled.div``;

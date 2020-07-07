@@ -8,19 +8,44 @@ import {
 } from "./Navbar.styles";
 
 const Navbar = (props) => {
+  const token = localStorage.getItem("token");
+
   return (
     <NavbarContainer>
-      <BrandContainer><span>My</span>route.</BrandContainer>
+      <BrandContainer>
+        <span>My</span>route.
+      </BrandContainer>
       <Menu>
         <MenuItem>
-          <MenuLink active={props.home && props.home} to="/">Home</MenuLink>
+          <MenuLink active={props.home && props.home} to="/">
+            Home
+          </MenuLink>
         </MenuItem>
-        <MenuItem>
-          <MenuLink active={props.login && props.login} to="/login">Login</MenuLink>
-        </MenuItem>
-        <MenuItem>
-          <MenuLink active={props.register && props.register} to="/register">Register</MenuLink>
-        </MenuItem>
+        {token ? (
+          <>
+            <MenuItem>
+              <MenuLink active={props.login && props.login} to="/dashboard">
+                Dashboard
+              </MenuLink>
+            </MenuItem>
+          </>
+        ) : (
+          <>
+            <MenuItem>
+              <MenuLink active={props.login && props.login} to="/login">
+                Login
+              </MenuLink>
+            </MenuItem>
+            <MenuItem>
+              <MenuLink
+                active={props.register && props.register}
+                to="/register"
+              >
+                Register
+              </MenuLink>
+            </MenuItem>
+          </>
+        )}
       </Menu>
     </NavbarContainer>
   );

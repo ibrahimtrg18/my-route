@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import { Formik } from "formik";
 import * as yup from "yup";
+import { useHistory } from "react-router-dom";
 import {
   LoginFormContainer,
   Paragraph,
@@ -18,7 +20,13 @@ const validationSchema = yup.object().shape({
   password: yup.string().required(),
 });
 
+const SERVER_URL = process.env.SERVER_URL || "http://localhost:4000";
+
 const LoginForm = () => {
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState(0);
+
+  let history = useHistory();
   return (
     <LoginFormContainer>
       <Image src={require("../../assets/images/login.png")} />
@@ -29,12 +37,26 @@ const LoginForm = () => {
           password: "",
         }}
         validationSchema={validationSchema}
-        onSubmit={(data) => {
-          console.log(data);
+        onSubmit={async (data) => {
+          try {
+            const response = await axios.post(
+              `${SERVER_URL}/api/business/login`,
+              data
+            );
+            localStorage.setItem("token", response.data.data.accessToken);
+            setMessage(response.data.message);
+            setStatus(1);
+            history.push("/dashboard");
+          } catch (err) {
+            console.log(err.response);
+            setMessage(err.response.data.message);
+            setStatus(0);
+          }
         }}
       >
         {({ values, errors, touched, handleChange, handleSubmit }) => (
-          <Form id="login-form" onSubmit={handleSubmit}>
+          <Form id="login-form" onSubmit={handleSubmit} status={status}>
+            <span>{message && message}</span>
             <Label>
               Email Address
               <Input

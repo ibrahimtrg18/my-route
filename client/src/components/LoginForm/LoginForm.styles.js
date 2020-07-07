@@ -30,6 +30,13 @@ export const Divider = styled.div`
 
 export const Form = styled.form`
   align-self: center;
+  & > span {
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+    color: ${(props) => props.status ? props.theme.primaryColor : props.theme.dangerColor};
+  }
 `;
 
 export const Label = styled.label`

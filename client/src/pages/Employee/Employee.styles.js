@@ -97,8 +97,8 @@ export const EmployeeCard = styled.div`
   &:hover {
     background-color: ${(props) =>
       props.customId === props.active
-        ? props.theme.primaryBackground
-        : props.theme.inputBackground};
+        ? props.theme.secondaryBackground
+        : props.theme.primaryBackground};
   }
   background-color: ${(props) =>
     props.customId === props.active

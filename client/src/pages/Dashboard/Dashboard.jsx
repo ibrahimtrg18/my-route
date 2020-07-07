@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+import { ReactComponent as Add } from "../../assets/icons/add-circle.svg";
 import {
   DashboardContainer,
   LeftSide,
@@ -16,12 +19,41 @@ import {
   Time,
   Distance,
 } from "./Dashboard.styles";
-
-import { ReactComponent as Add } from "../../assets/icons/add-circle.svg";
-import Menu from "../../components/Menu/Menu";
 import EmployeeRoute from "../../components/EmployeeRoute/EmployeeRoute";
+import Menu from "../../components/Menu/Menu";
+
+const SERVER_URL = process.env.SERVER_URL || "http://localhost:4000";
 
 const Dashboard = () => {
+  const [pageLoading, setPageLoading] = useState(true);
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!token) history.push("/login");
+  }, [token]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.get(
+          `${SERVER_URL}/api/business/onprogress`,
+          {
+            headers: {
+              "x-token": token,
+            },
+          }
+        );
+        console.log(response);
+      } catch (err) {
+        console.log(err);
+        localStorage.removeItem("token");
+        setToken(null);
+      }
+      setPageLoading(false);
+    })();
+  }, []);
+
   const [employees] = useState([
     {
       avatar: "../../assets/images/avatar.png",
@@ -56,42 +88,48 @@ const Dashboard = () => {
 
   return (
     <>
-      <DashboardContainer>
-        <LeftSide>
-          <HeaderContainer>
-            <Brand>
-              <span>My</span>Route
-            </Brand>
-            <Menu dashboard={1} />
-          </HeaderContainer>
-          <BannerContainer>
-            <Banner src={require("../../assets/images/dashboard.png")}></Banner>
-            <Button>
-              Add new route <Add width={21} height={21} />
-            </Button>
-          </BannerContainer>
-          <EmployeeList>
-            {employees.map((emp) => {
-              return (
-                <Employee
-                  key={emp.customId}
-                  customId={emp.customId}
-                  active={employee.customId}
-                  onClick={() => handleEmployeeClick(emp)}
-                >
-                  <Avatar src={require("../../assets/images/avatar.png")} />
-                  <Name>{emp.name}</Name>
-                  <CustomId>{emp.customId}</CustomId>
-                  <Date>{emp.date}</Date>
-                  <Time>{emp.time}</Time>
-                  <Distance>{emp.distance}KM</Distance>
-                </Employee>
-              );
-            })}
-          </EmployeeList>
-        </LeftSide>
-        <EmployeeRoute employee={employee} />
-      </DashboardContainer>
+      {!pageLoading ? (
+        <DashboardContainer>
+          <LeftSide>
+            <HeaderContainer>
+              <Brand>
+                <span>My</span>Route
+              </Brand>
+              <Menu dashboard={1} />
+            </HeaderContainer>
+            <BannerContainer>
+              <Banner
+                src={require("../../assets/images/dashboard.png")}
+              ></Banner>
+              <Button>
+                Add new route <Add width={21} height={21} />
+              </Button>
+            </BannerContainer>
+            <EmployeeList>
+              {employees.map((emp) => {
+                return (
+                  <Employee
+                    key={emp.customId}
+                    customId={emp.customId}
+                    active={employee.customId}
+                    onClick={() => handleEmployeeClick(emp)}
+                  >
+                    <Avatar src={require("../../assets/images/avatar.png")} />
+                    <Name>{emp.name}</Name>
+                    <CustomId>{emp.customId}</CustomId>
+                    <Date>{emp.date}</Date>
+                    <Time>{emp.time}</Time>
+                    <Distance>{emp.distance}KM</Distance>
+                  </Employee>
+                );
+              })}
+            </EmployeeList>
+          </LeftSide>
+          <EmployeeRoute employee={employee} />
+        </DashboardContainer>
+      ) : (
+        "Loading.."
+      )}
     </>
   );
 };
