@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const { createTableBusiness,createTableBusinessEmployee, createTableEmployee } = require("./config/schema");
 
 const PORT = process.env.PORT || 4000;
 const app = express();
@@ -12,9 +13,9 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-require("./config/schema")
-  .createTableBusiness()
-  .catch((err) => console.log(err));
+createTableBusiness();
+createTableEmployee();
+createTableBusinessEmployee();
 
 app.use("/api/business", routeBusiness);
 

@@ -11,8 +11,11 @@ router.post("/register", async (req, res) => {
   try {
     const emailValid = await validator.isEmail(email);
     if (emailValid) {
-      const isExist = await db("business").where("email", email);
-      if (isExist.length === 0) {
+      const isEmailExist = await db("business").where(
+        "email",
+        email.toLowerCase()
+      );
+      if (isEmailExist.length === 0) {
         const id = await db("business").insert({
           name: businessName,
           email: email.toLowerCase(),
@@ -35,7 +38,7 @@ router.post("/register", async (req, res) => {
       return res.status(406).json({
         code: res.statusCode,
         success: false,
-        message: "email field must be email!",
+        message: "email field must be an email",
       });
     }
   } catch (err) {
@@ -110,7 +113,76 @@ router.get("/onprogress", isAuth, async (req, res) => {
 
 router.get("/history", isAuth, async (req, res) => {});
 
-router.get("/employee", async (req, res) => {});
+router.get("/employee", isAuth, async (req, res) => {
+  const businessId = req.userId;
 
-router.post("/employee/register", isAuth, async (req, res) => {});
+  try {
+    const rowsEmployeesId = await db
+      .select("employee_id")
+      .from("business_employee")
+      .where({ business_id: businessId });
+    const rows = await db
+      .select("*")
+      .from("employee")
+      .whereIn(
+        "id",
+        rowsEmployeesId.map((employee) => {
+          return employee.employee_id;
+        })
+      );
+    return res.json({ data: rows });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.post("/employee/register", isAuth, async (req, res) => {
+  const { name, customId, email, password, phoneNumber, address } = req.body;
+  const businessId = req.userId;
+
+  try {
+    const emailValid = await validator.isEmail(email);
+    if (emailValid) {
+      const isEmailExist = await db("business").where("email", email);
+      if (isEmailExist.length === 0) {
+        const employeeId = await db("employee").insert({
+          name,
+          custom_id: customId.toLowerCase(),
+          email: email.toLowerCase(),
+          password,
+          phone_number: phoneNumber,
+          address,
+        });
+        const businessEmployeeId = await db("business_employee").insert({
+          business_id: businessId,
+          employee_id: employeeId,
+        });
+        return res.status(201).json({
+          code: res.statusCode,
+          success: true,
+          message: "successfully created account",
+        });
+      } else {
+        return res.status(409).json({
+          code: res.statusCode,
+          success: false,
+          message: "email already exist",
+        });
+      }
+    } else {
+      return res.status(406).json({
+        code: res.statusCode,
+        success: true,
+        message: "email field must be an email",
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      code: res.statusCode,
+      success: false,
+      message: err,
+    });
+  }
+});
+
 module.exports = router;
