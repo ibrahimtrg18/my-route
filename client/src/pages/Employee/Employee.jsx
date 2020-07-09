@@ -69,7 +69,7 @@ const Employee = () => {
         </HeaderContainer>
         <BannerContainer>
           <Banner src={require("../../assets/images/employee.png")}></Banner>
-          <Button>
+          <Button to="/employee/register">
             Add new employee <Add width={21} height={21} />
           </Button>
         </BannerContainer>

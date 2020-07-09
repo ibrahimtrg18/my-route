@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
-export const RegisterFormContainer = styled.div`
+export const EmployeeRegisterFormContainer = styled.div`
   display: grid;
   grid-template-columns: 40% 20% 40%;
+  margin-bottom: 32px;
   @media (max-width: 600px) {
     grid-template-columns: auto;
     padding: 0 32px;
@@ -102,11 +103,4 @@ export const Button = styled.button`
         ? props.theme.primaryDarkButton
         : props.theme.secondaryDarkButton};
   }
-`;
-
-export const Paragraph = styled.p`
-  text-align: center;
-  color: ${(props) => props.theme.tertiaryColor};
-  font-weight: 300;
-  font-size: 16px;
 `;

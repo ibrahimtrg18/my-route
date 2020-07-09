@@ -13,6 +13,7 @@ export const LoginFormContainer = styled.div`
 `;
 
 export const Image = styled.img`
+  align-self: center;
   width: 100%;
   @media (max-width: 600px) {
     display: none;
@@ -35,7 +36,8 @@ export const Form = styled.form`
     font-size: 14px;
     font-weight: 400;
     text-align: center;
-    color: ${(props) => props.status ? props.theme.primaryColor : props.theme.dangerColor};
+    color: ${(props) =>
+      props.status ? props.theme.primaryColor : props.theme.dangerColor};
   }
 `;
 

@@ -5,8 +5,8 @@ const Menu = (props) => {
   return (
     <MenuContainer>
       <MenuList>
-        <MenuItem active={props.dashboard && props.dashboard}>
-          <MenuLink to="/dashboard">On Progress</MenuLink>
+        <MenuItem active={props.onprogress && props.onprogress}>
+          <MenuLink to="/onprogress">On Progress</MenuLink>
         </MenuItem>
         <MenuItem active={props.history && props.history}>
           <MenuLink to="/history">History</MenuLink>

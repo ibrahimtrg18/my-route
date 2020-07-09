@@ -57,7 +57,12 @@ const RegisterForm = () => {
           }}
         >
           {({ values, errors, touched, handleChange, handleSubmit }) => (
-            <Form id="register-form" onSubmit={handleSubmit} status={status}>
+            <Form
+              id="register-form"
+              onSubmit={handleSubmit}
+              status={status}
+              autoComplete="off"
+            >
               <span>{message && message}</span>
               <Label>
                 Business Name
@@ -66,7 +71,6 @@ const RegisterForm = () => {
                   type="text"
                   value={values.businessName}
                   onChange={handleChange}
-                  autoComplete="off"
                 />
                 <span>
                   {errors.businessName &&
@@ -81,7 +85,6 @@ const RegisterForm = () => {
                   type="email"
                   value={values.email}
                   onChange={handleChange}
-                  autoComplete="off"
                 />
                 <span>{errors.email && touched.email && errors.email}</span>
               </Label>
@@ -92,7 +95,6 @@ const RegisterForm = () => {
                   type="tel"
                   value={values.phoneNumber}
                   onChange={handleChange}
-                  autoComplete="off"
                 />
                 <span>
                   {errors.phoneNumber &&

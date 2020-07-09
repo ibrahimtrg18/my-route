@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { EmployeeRouteContainer } from "../../components/EmployeeRoute/EmployeeRoute.styles";
 
-export const DashboardContainer = styled.div`
+export const OnProgressContainer = styled.div`
   display: flex;
   background-color: ${(props) => props.theme.secondaryBackground};
   ${EmployeeRouteContainer} {

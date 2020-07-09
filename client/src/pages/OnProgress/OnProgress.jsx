@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import { ReactComponent as Add } from "../../assets/icons/add-circle.svg";
 import {
-  DashboardContainer,
+  OnProgressContainer,
   LeftSide,
   HeaderContainer,
   Brand,
@@ -18,13 +18,13 @@ import {
   Date,
   Time,
   Distance,
-} from "./Dashboard.styles";
+} from "./OnProgress.styles";
 import EmployeeRoute from "../../components/EmployeeRoute/EmployeeRoute";
 import Menu from "../../components/Menu/Menu";
 
 const SERVER_URL = process.env.SERVER_URL || "http://localhost:4000";
 
-const Dashboard = () => {
+const OnProgress = () => {
   const [pageLoading, setPageLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem("token"));
   const history = useHistory();
@@ -86,20 +86,24 @@ const Dashboard = () => {
     console.log(employee);
   };
 
+  if(!token){
+    return <Redirect to="/login"/>
+  }
+
   return (
     <>
       {!pageLoading ? (
-        <DashboardContainer>
+        <OnProgressContainer>
           <LeftSide>
             <HeaderContainer>
               <Brand>
                 <span>My</span>Route
               </Brand>
-              <Menu dashboard={1} />
+              <Menu onprogress={1} />
             </HeaderContainer>
             <BannerContainer>
               <Banner
-                src={require("../../assets/images/dashboard.png")}
+                src={require("../../assets/images/onprogress.png")}
               ></Banner>
               <Button>
                 Add new route <Add width={21} height={21} />
@@ -126,7 +130,7 @@ const Dashboard = () => {
             </EmployeeList>
           </LeftSide>
           <EmployeeRoute employee={employee} />
-        </DashboardContainer>
+        </OnProgressContainer>
       ) : (
         "Loading.."
       )}
@@ -134,4 +138,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default OnProgress;

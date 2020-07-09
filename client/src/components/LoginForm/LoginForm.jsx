@@ -46,7 +46,7 @@ const LoginForm = () => {
             localStorage.setItem("token", response.data.data.accessToken);
             setMessage(response.data.message);
             setStatus(1);
-            history.push("/dashboard");
+            history.push("/onprogress");
           } catch (err) {
             console.log(err.response);
             setMessage(err.response.data.message);
@@ -55,7 +55,12 @@ const LoginForm = () => {
         }}
       >
         {({ values, errors, touched, handleChange, handleSubmit }) => (
-          <Form id="login-form" onSubmit={handleSubmit} status={status}>
+          <Form
+            id="login-form"
+            onSubmit={handleSubmit}
+            status={status}
+            autoComplete="off"
+          >
             <span>{message && message}</span>
             <Label>
               Email Address
@@ -64,7 +69,6 @@ const LoginForm = () => {
                 type="email"
                 value={values.email}
                 onChange={handleChange}
-                autoComplete="off"
               />
               <span>{errors.email && touched.email && errors.email}</span>
             </Label>

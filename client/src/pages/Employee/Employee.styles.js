@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const EmployeeContainer = styled.div`
   display: flex;
@@ -53,7 +54,7 @@ export const Banner = styled.img`
   }
 `;
 
-export const Button = styled.button`
+export const Button = styled(Link)`
   position: absolute;
   left: 24px;
   bottom: 24px;
@@ -70,8 +71,12 @@ export const Button = styled.button`
   font-size: 14px;
   display: flex;
   align-items: center;
+    text-decoration: none;
   & > svg {
     margin-left: 8px;
+  }
+  &:hover {
+    text-decoration: underline;
   }
   @media (max-width: 600px) {
     position: static;
