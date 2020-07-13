@@ -90,6 +90,88 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.get("/settings", isAuth, async (req, res) => {
+  const businessId = req.userId;
+  try {
+    const rows = await db
+      .select("*")
+      .from("business")
+      .where({ id: businessId });
+    return res.status(200).json({
+      code: res.statusCode,
+      success: true,
+      data: rows[0],
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      code: res.statusCode,
+      success: false,
+      message: err,
+    });
+  }
+});
+
+router.put("/settings", isAuth, async (req, res) => {
+  const businessId = req.userId;
+  const {
+    businessName,
+    phoneNumber,
+    email,
+    newPassword,
+    prevPassword,
+  } = req.body;
+  try {
+    const oldPassword = await db
+      .select("password")
+      .from("business")
+      .where({ id: businessId });
+    const isEmailInBusiness = await db
+      .select("email")
+      .from("business")
+      .where({ email: email });
+    const isEmailInEmployee = await db
+      .select("email")
+      .from("employee")
+      .where({ email: email });
+      console.log(isEmailInBusiness.length, isEmailInEmployee.length)
+    if (isEmailInBusiness.length <= 1 && isEmailInEmployee.length === 0) {
+      if (oldPassword[0].password === prevPassword) {
+        await db("business").where({ id: businessId }).update({
+          name: businessName,
+          phone_number: phoneNumber,
+          email,
+          password: newPassword,
+        });
+        return res.status(200).json({
+          code: res.statusCode,
+          success: true,
+          message: "successfully update business",
+        });
+      } else {
+        return res.status(200).json({
+          code: res.statusCode,
+          success: false,
+          message: "wrong previous password",
+        });
+      }
+    } else {
+      return res.status(409).json({
+        code: res.statusCode,
+        successs: false,
+        message: "email already exist",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      code: res.statusCode,
+      success: false,
+      message: err,
+    });
+  }
+});
+
 router.get("/q", async (req, res) => {
   const id = req.query.id;
 
@@ -111,7 +193,7 @@ router.get("/onprogress", isAuth, async (req, res) => {
   }
 });
 
-router.get("/history", isAuth, async (req, res) => {});
+router.get("/history", isAuth, async (_req, _res) => {});
 
 router.get("/employee", isAuth, async (req, res) => {
   const businessId = req.userId;
@@ -130,9 +212,18 @@ router.get("/employee", isAuth, async (req, res) => {
           return employee.employee_id;
         })
       );
-    return res.json({ data: rows });
+    return res.status(200).json({
+      code: res.statusCode,
+      success: true,
+      data: rows,
+      message: `Found employee ${rows.length}`,
+    });
   } catch (err) {
-    console.log(err);
+    return res.status(500).json({
+      code: res.statusCode,
+      success: false,
+      message: err,
+    });
   }
 });
 
@@ -143,8 +234,15 @@ router.post("/employee/register", isAuth, async (req, res) => {
   try {
     const emailValid = await validator.isEmail(email);
     if (emailValid) {
-      const isEmailExist = await db("business").where("email", email);
-      if (isEmailExist.length === 0) {
+      const isEmailInBusiness = await db
+        .select("email")
+        .from("business")
+        .where({ email: email });
+      const isEmailInEmployee = await db
+        .select("email")
+        .from("employee")
+        .where({ email: email });
+      if (isEmailInBusiness.length === 0 && isEmailInEmployee.length === 0) {
         const employeeId = await db("employee").insert({
           name,
           custom_id: customId.toLowerCase(),

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const HistoryContainer = styled.div`
   display: flex;
@@ -23,9 +24,10 @@ export const HeaderContainer = styled.div`
     margin-bottom: 16px;
   }
 `;
-
-export const Brand = styled.div`
+export const Brand = styled(Link)`
   display: inline-block;
+  text-decoration: none;
+  color: ${(props) => props.theme.darkColor};
   font-size: 21px;
   font-weight: 500;
   margin-bottom: 32px;

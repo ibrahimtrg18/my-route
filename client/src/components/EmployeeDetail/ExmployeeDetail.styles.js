@@ -65,8 +65,9 @@ export const Name = styled.div`
 
 export const CustomId = styled.div`
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 600;
   margin-top: 16px;
+  text-transform: uppercase;
 `;
 
 export const PhoneNumber = styled.div`

@@ -59,6 +59,9 @@ module.exports = {
             table.string("password").notNullable();
             table.string("phone_number").notNullable();
             table.string("address");
+            table.integer("status").defaultTo(0);
+            table.integer("total_route", 11).defaultTo(0);
+            table.integer("total_distance", 11).defaultTo(0);
             table.timestamps(true, true);
             return console.log("table employee successfully created");
           });

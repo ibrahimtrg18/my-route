@@ -22,9 +22,10 @@ export const HeaderContainer = styled.div`
     margin-bottom: 16px;
   }
 `;
-
-export const Brand = styled.div`
+export const Brand = styled(Link)`
   display: inline-block;
+  text-decoration: none;
+  color: ${(props) => props.theme.darkColor};
   font-size: 21px;
   font-weight: 500;
   margin-bottom: 32px;
@@ -38,11 +39,13 @@ export const ContentContainer = styled.div``;
 
 export const BannerContainer = styled.div`
   width: 100%;
+  height: 300px;
   height: auto;
   position: relative;
   margin-bottom: 32px;
   @media (max-width: 600px) {
     margin-bottom: 16px;
+    height: auto;
   }
 `;
 
@@ -71,7 +74,7 @@ export const Button = styled(Link)`
   font-size: 14px;
   display: flex;
   align-items: center;
-    text-decoration: none;
+  text-decoration: none;
   & > svg {
     margin-left: 8px;
   }
@@ -83,12 +86,32 @@ export const Button = styled(Link)`
   }
 `;
 
+export const Search = styled.input`
+  background-color: ${(props) => props.theme.whiteColor};
+  font-family: "Poppins", sans-serif;
+  border-color: transparent;
+  border-radius: 8px;
+  padding: 100px;
+  width: 100%;
+  height: 40px;
+  font-size: 14px;
+  padding: 0 16px;
+  margin-bottom: 16px;
+  &::placeholder {
+    color: ${(props) => props.theme.primaryColor};
+  }
+  &:focus {
+    border: solid 2px ${(props) => props.theme.primaryButton};
+    background-color: ${(props) => props.theme.primaryBackground};
+  }
+`;
+
 export const EmployeeList = styled.div``;
 
 export const EmployeeCard = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 10% 30% 30% 10% 10% 10%;
+  grid-template-columns: 10% 20% 20% 20% 20% 10%;
   grid-column-gap: auto;
   text-align: center;
   overflow-x: auto;
@@ -126,7 +149,17 @@ export const Name = styled.div``;
 
 export const CustomId = styled.div``;
 
-export const Status = styled.div``;
+export const Status = styled.div`
+  & > span {
+    display: inline-block;
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    margin-right: 4px;
+    background-color: ${(props) =>
+      props.status ? props.theme.primaryColor : props.theme.dangerColor};
+  }
+`;
 
 export const TotalRoute = styled.div``;
 

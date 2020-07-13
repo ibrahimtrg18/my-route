@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Formik } from "formik";
 import * as yup from "yup";
+import Loader from "react-loader-spinner";
 import { useHistory } from "react-router-dom";
 import {
   LoginFormContainer,
@@ -25,6 +26,7 @@ const SERVER_URL = process.env.SERVER_URL || "http://localhost:4000";
 const LoginForm = () => {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   let history = useHistory();
   return (
@@ -38,6 +40,7 @@ const LoginForm = () => {
         }}
         validationSchema={validationSchema}
         onSubmit={async (data) => {
+          await setLoading(true);
           try {
             const response = await axios.post(
               `${SERVER_URL}/api/business/login`,
@@ -46,11 +49,13 @@ const LoginForm = () => {
             localStorage.setItem("token", response.data.data.accessToken);
             setMessage(response.data.message);
             setStatus(1);
+            setLoading(false);
             history.push("/onprogress");
           } catch (err) {
             console.log(err.response);
             setMessage(err.response.data.message);
             setStatus(0);
+            setLoading(false);
           }
         }}
       >
@@ -88,8 +93,18 @@ const LoginForm = () => {
         )}
       </Formik>
       <Actions>
-        <Button primary form="login-form" type="submit">
-          Login
+        <Button primary form="login-form" type="submit" disabled={loading}>
+          {loading ? (
+            <Loader
+              type="Oval"
+              color="#fff"
+              height={22}
+              width={22}
+              style={{ display: "flex", justifyContent: "center" }}
+            />
+          ) : (
+            "Login"
+          )}
         </Button>
         <Paragraph>Dont have account ?</Paragraph>
         <Button>Register</Button>

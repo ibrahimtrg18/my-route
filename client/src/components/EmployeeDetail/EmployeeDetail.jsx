@@ -15,19 +15,27 @@ import {
 } from "./ExmployeeDetail.styles";
 
 const EmployeeDetail = (props) => {
+  console.log(props.employee);
   return (
     <EmployeeDetailContainer>
       <EmployeeContainer>
-        <Avatar src={require("../../assets/images/avatar-big.png")} />
-        <AllWork>
-          <TotalRoute>{props.employee.totalRoute} Route</TotalRoute>
-          <Divider />
-          <TotalDistance>{props.employee.totalDistance} KM</TotalDistance>
-        </AllWork>
+        <Avatar
+          src={
+            props.employee.id &&
+            require("../../assets/images/avatar-big.png")
+          }
+        />
+        {props.employee.id && (
+          <AllWork>
+            <TotalRoute>{props.employee.total_route} Route</TotalRoute>
+            <Divider />
+            <TotalDistance>{props.employee.total_distance} KM</TotalDistance>
+          </AllWork>
+        )}
         <Information>
           <Name>{props.employee.name}</Name>
-          <CustomId>{props.employee.customId}</CustomId>
-          <PhoneNumber>{props.employee.phoneNumber}</PhoneNumber>
+          <CustomId>{props.employee.custom_id}</CustomId>
+          <PhoneNumber>{props.employee.phone_number}</PhoneNumber>
           <Address>{props.employee.address}</Address>
         </Information>
       </EmployeeContainer>

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { EmployeeRouteContainer } from "../../components/EmployeeRoute/EmployeeRoute.styles";
+import { Link } from "react-router-dom";
 
 export const OnProgressContainer = styled.div`
   display: flex;
@@ -25,8 +26,10 @@ export const HeaderContainer = styled.div`
   }
 `;
 
-export const Brand = styled.div`
+export const Brand = styled(Link)`
   display: inline-block;
+  text-decoration: none;
+  color: ${(props) => props.theme.darkColor};
   font-size: 21px;
   font-weight: 500;
   margin-bottom: 32px;
@@ -40,11 +43,13 @@ export const ContentContainer = styled.div``;
 
 export const BannerContainer = styled.div`
   width: 100%;
+  height: 300px;
   height: auto;
   position: relative;
   margin-bottom: 32px;
   @media (max-width: 600px) {
     margin-bottom: 16px;
+    height: auto;
   }
 `;
 
@@ -56,7 +61,7 @@ export const Banner = styled.img`
   }
 `;
 
-export const Button = styled.button`
+export const Button = styled(Link)`
   position: absolute;
   left: 24px;
   bottom: 24px;
@@ -73,8 +78,12 @@ export const Button = styled.button`
   font-size: 14px;
   display: flex;
   align-items: center;
+  text-decoration: none;
   & > svg {
     margin-left: 8px;
+  }
+  &:hover {
+    text-decoration: underline;
   }
   @media (max-width: 600px) {
     position: static;

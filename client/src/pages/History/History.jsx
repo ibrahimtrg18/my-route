@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -17,7 +18,6 @@ import {
   EmployeeTime,
   EmployeeDistance,
 } from "./History.styles";
-
 import Menu from "../../components/Menu/Menu";
 import EmployeeHistory from "../../components/EmployeeHistory/EmployeeHistory";
 import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg";
@@ -32,6 +32,7 @@ const CustomDatePicker = ({ value, onClick }) => {
 };
 
 const History = () => {
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const [date, setDate] = useState(new Date());
   const [employees] = useState([
     {
@@ -64,11 +65,15 @@ const History = () => {
     setEmployee(employee);
     console.log(employee);
   };
+
+  if (!token) {
+    return <Redirect to="/login" />;
+  }
   return (
     <HistoryContainer>
       <LeftSide>
         <HeaderContainer>
-          <Brand>
+          <Brand to="/history">
             <span>My</span>Route
           </Brand>
           <Menu history={1} />

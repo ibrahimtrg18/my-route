@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Formik } from "formik";
 import axios from "axios";
 import * as yup from "yup";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import {
   RegisterFormContainer,
   Paragraph,
@@ -29,6 +31,8 @@ const validationSchema = yup.object().shape({
 const RegisterForm = () => {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(0);
+  const [loading, setLoading] = useState(false);
+
   return (
     <>
       <RegisterFormContainer>
@@ -42,7 +46,8 @@ const RegisterForm = () => {
             password: "",
           }}
           validationSchema={validationSchema}
-          onSubmit={async (data) => {
+          onSubmit={async (data, { resetForm }) => {
+            await setLoading(true);
             try {
               const response = await axios.post(
                 `http://localhost:4000/api/business/register`,
@@ -50,9 +55,12 @@ const RegisterForm = () => {
               );
               setMessage(response.data.message);
               setStatus(1);
+              setLoading(false);
+              resetForm();
             } catch (err) {
               setMessage(err.response.data.message);
               setStatus(0);
+              setLoading(false);
             }
           }}
         >
@@ -118,8 +126,18 @@ const RegisterForm = () => {
           )}
         </Formik>
         <Actions>
-          <Button primary form="register-form" type="submit">
-            Register
+          <Button primary form="register-form" type="submit" disabled={loading}>
+            {loading ? (
+              <Loader
+                type="Oval"
+                color="#fff"
+                height={22}
+                width={22}
+                style={{ display: "flex", justifyContent: "center" }}
+              />
+            ) : (
+              "Register"
+            )}
           </Button>
           <Paragraph>Already have account ?</Paragraph>
           <Button>Login</Button>

@@ -14,12 +14,14 @@ import OnProgress from "../pages/OnProgress/OnProgress";
 import History from "../pages/History/History";
 import Employee from "../pages/Employee/Employee";
 import EmployeeRegister from "../pages/EmployeeRegister/EmployeeRegister";
+import AddRoute from "../pages/AddRoute/AddRoute";
+import Settings from "../pages/Settings/Settings";
 
 const Routes = () => {
   return (
     <Router>
       <Switch>
-        {/* <Route exact path="/settings" component={} /> */}
+        <PrivateRoute exact path="/settings" component={Settings} />
         <PrivateRoute
           exact
           path="/employee/register"
@@ -27,8 +29,8 @@ const Routes = () => {
         />
         <PrivateRoute exact path="/employee" component={Employee} />
         <PrivateRoute exact path="/history" component={History} />
-        {/* <Route exact path="/destination" component={} />
-          <Route exact path="/route" component={} /> */}
+        {/* {/* <Route exact path="/destination" component={} /> */}
+        <PrivateRoute exact path="/route/add" component={AddRoute} />
         <PrivateRoute exact path="/onprogress" component={OnProgress} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />

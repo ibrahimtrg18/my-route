@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   EmployeeContainer,
   LeftSide,
@@ -7,6 +8,7 @@ import {
   BannerContainer,
   Banner,
   Button,
+  Search,
   EmployeeList,
   EmployeeCard,
   Avatar,
@@ -20,49 +22,40 @@ import Menu from "../../components/Menu/Menu";
 import EmployeeDetail from "../../components/EmployeeDetail/EmployeeDetail";
 import { ReactComponent as Add } from "../../assets/icons/add-circle.svg";
 
+const SERVER_URL = process.env.SERVER_URL || "http://localhost:4000";
+
 const Employee = () => {
-  const [employees] = useState([
-    {
-      avatar: "../../assets/images/avatar.png",
-      name: "Ibrahim Tarigan",
-      customId: "AF1020DC3040",
-      status: 0,
-      totalRoute: 20,
-      totalDistance: 420,
-      phoneNumber: "081209129012",
-      address: "Jln. Jend jamin ginting no.685",
-    },
-    {
-      avatar: "../../assets/images/avatar.png",
-      name: "Jonatan Prima",
-      customId: "AF1020DC1234",
-      status: 1,
-      totalRoute: 30,
-      totalDistance: 430,
-      phoneNumber: "085325232425",
-      address: "Jln. Thamrin no.140",
-    },
-    {
-      avatar: "../../assets/images/avatar.png",
-      name: "Anggiat Pasaribu",
-      customId: "AF1020DC4321",
-      status: 1,
-      totalRoute: 40,
-      totalDistance: 440,
-      phoneNumber: "087237332777",
-      address: "Jln. Sekip no.125",
-    },
-  ]);
+  const token = localStorage.getItem("token");
+  const [employees, setEmployees] = useState([]);
   const [employee, setEmployee] = useState({});
   const handleEmployeeClick = (employee) => {
     setEmployee(employee);
     console.log(employee);
   };
+
+  useEffect(() => {
+    (async function () {
+      const response = await axios.get(`${SERVER_URL}/api/business/employee`, {
+        headers: {
+          "x-token": token,
+        },
+      });
+      const data = await response.data.data.map((employee) => {
+        employee.phone_number = employee.phone_number
+          .match(/.{1,4}/g)
+          .join(" ");
+        return employee;
+      });
+      setEmployees(data);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <EmployeeContainer>
       <LeftSide>
         <HeaderContainer>
-          <Brand>
+          <Brand to="/employee">
             <span>My</span>Route
           </Brand>
           <Menu employee={1} />
@@ -73,21 +66,25 @@ const Employee = () => {
             Add new employee <Add width={21} height={21} />
           </Button>
         </BannerContainer>
+        <Search type="text" placeholder="Search Courier..." />
         <EmployeeList>
           {employees.map((emp) => {
             return (
               <EmployeeCard
-                key={emp.customId}
-                customId={emp.customId}
-                active={employee.customId}
+                key={emp.id}
+                customId={emp.custom_id}
+                active={employee.custom_id}
                 onClick={() => handleEmployeeClick(emp)}
               >
                 <Avatar src={require("../../assets/images/avatar.png")} />
                 <Name>{emp.name}</Name>
-                <CustomId>{emp.customId}</CustomId>
-                <Status>{emp.status === 0 ? "Standby" : "On Way"}</Status>
-                <TotalRoute>{emp.totalRoute}</TotalRoute>
-                <TotalDistance>{emp.totalDistance}KM</TotalDistance>
+                <CustomId>{emp.custom_id}</CustomId>
+                <Status status={emp.status}>
+                  <span></span>
+                  {emp.status === 0 ? "Standby" : "On Way"}
+                </Status>
+                <TotalRoute>{emp.total_route} route</TotalRoute>
+                <TotalDistance>{emp.total_distance}KM</TotalDistance>
               </EmployeeCard>
             );
           })}

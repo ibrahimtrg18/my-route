@@ -25,8 +25,34 @@ import Menu from "../../components/Menu/Menu";
 const SERVER_URL = process.env.SERVER_URL || "http://localhost:4000";
 
 const OnProgress = () => {
-  const [pageLoading, setPageLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [pageLoading, setPageLoading] = useState(true);
+  const [employees, setEmployees] = useState([
+    {
+      avatar: "../../assets/images/avatar.png",
+      name: "Ibrahim Tarigan",
+      customId: "AF1020DC3040",
+      date: "17 Mei 2020",
+      time: "09 : 30",
+      distance: 42,
+    },
+    {
+      avatar: "../../assets/images/avatar.png",
+      name: "Jonatan Prima",
+      customId: "AF1020DC1234",
+      date: "17 Mei 2020",
+      time: "09 : 30",
+      distance: 43,
+    },
+    {
+      avatar: "../../assets/images/avatar.png",
+      name: "Anggiat Pasaribu",
+      customId: "AF1020DC4321",
+      date: "17 Mei 2020",
+      time: "09 : 30",
+      distance: 44,
+    },
+  ]);
   const history = useHistory();
 
   useEffect(() => {
@@ -54,40 +80,14 @@ const OnProgress = () => {
     })();
   }, []);
 
-  const [employees] = useState([
-    {
-      avatar: "../../assets/images/avatar.png",
-      name: "Ibrahim Tarigan",
-      customId: "AF1020DC3040",
-      date: "17 Mei 2020",
-      time: "09 : 30",
-      distance: 42,
-    },
-    {
-      avatar: "../../assets/images/avatar.png",
-      name: "Jonatan Prima",
-      customId: "AF1020DC1234",
-      date: "17 Mei 2020",
-      time: "09 : 30",
-      distance: 43,
-    },
-    {
-      avatar: "../../assets/images/avatar.png",
-      name: "Anggiat Pasaribu",
-      customId: "AF1020DC4321",
-      date: "17 Mei 2020",
-      time: "09 : 30",
-      distance: 44,
-    },
-  ]);
   const [employee, setEmployee] = useState({});
   const handleEmployeeClick = (employee) => {
     setEmployee(employee);
     console.log(employee);
   };
 
-  if(!token){
-    return <Redirect to="/login"/>
+  if (!token) {
+    return <Redirect to="/login" />;
   }
 
   return (
@@ -96,7 +96,7 @@ const OnProgress = () => {
         <OnProgressContainer>
           <LeftSide>
             <HeaderContainer>
-              <Brand>
+              <Brand to="/onprogress">
                 <span>My</span>Route
               </Brand>
               <Menu onprogress={1} />
@@ -105,7 +105,7 @@ const OnProgress = () => {
               <Banner
                 src={require("../../assets/images/onprogress.png")}
               ></Banner>
-              <Button>
+              <Button to="/route/add">
                 Add new route <Add width={21} height={21} />
               </Button>
             </BannerContainer>
