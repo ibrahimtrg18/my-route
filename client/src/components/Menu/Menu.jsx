@@ -2,6 +2,10 @@ import React from "react";
 import { MenuContainer, MenuList, MenuItem, MenuLink } from "./Menu.styles";
 
 const Menu = (props) => {
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+  };
+
   return (
     <MenuContainer>
       <MenuList>
@@ -16,6 +20,9 @@ const Menu = (props) => {
         </MenuItem>
         <MenuItem active={props.settings && props.settings}>
           <MenuLink to="/settings">Settings</MenuLink>
+        </MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <MenuLink to="/login">Log out</MenuLink>
         </MenuItem>
       </MenuList>
     </MenuContainer>

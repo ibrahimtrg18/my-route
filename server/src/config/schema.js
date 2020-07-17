@@ -7,7 +7,7 @@ module.exports = {
       .then((exists) => {
         if (!exists) {
           return db.schema.createTable("business", (table) => {
-            table.increments();
+            table.increments("id").primary();
             table.string("name").notNullable();
             table.string("email").notNullable();
             table.string("password").notNullable();
@@ -28,15 +28,9 @@ module.exports = {
       .then((exists) => {
         if (!exists) {
           return db.schema.createTable("business_employee", (table) => {
-            table.increments();
-            table.integer("business_id").unsigned();
-            table
-              .integer("employee_id")
-              .unsigned()
-              .notNullable()
-              .references("id")
-              .inTable("employee")
-              .onDelete("CASCADE");
+            table.increments("id").primary();
+            table.integer("business_id").unsigned().references("id").inTable("business");
+            table.integer("employee_id").unsigned().references("id").inTable("employee");
             table.timestamps(true, true);
             return console.log("table business_employee successfully created");
           });
@@ -52,13 +46,13 @@ module.exports = {
       .then((exists) => {
         if (!exists) {
           return db.schema.createTable("employee", (table) => {
-            table.increments();
+            table.increments("id").primary();
             table.string("name").notNullable();
             table.string("custom_id").notNullable();
             table.string("email").notNullable();
             table.string("password").notNullable();
             table.string("phone_number").notNullable();
-            table.string("address");
+            table.string("address").notNullable();
             table.integer("status").defaultTo(0);
             table.integer("total_route", 11).defaultTo(0);
             table.integer("total_distance", 11).defaultTo(0);
@@ -67,6 +61,83 @@ module.exports = {
           });
         } else {
           return console.log("table employee already exists!");
+        }
+      })
+      .catch((err) => console.log(err));
+  },
+  createTableRoute: function () {
+    return db.schema
+      .hasTable("route")
+      .then((exists) => {
+        if (!exists) {
+          return db.schema.createTable("route", (table) => {
+            table.increments("id").primary();
+            table.integer("employee_id").unsigned().references("id").inTable("employee");
+            table.integer("status").defaultTo(0);
+            table.timestamps(true, true);
+            return console.log("table route successfully created");
+          });
+        } else {
+          return console.log("table route already exists!");
+        }
+      })
+      .catch((err) => console.log(err));
+  },
+  createTableRouteDestination: function () {
+    return db.schema
+      .hasTable("route_destination")
+      .then((exists) => {
+        if (!exists) {
+          return db.schema.createTable("route_destination", (table) => {
+            table.increments("id").primary();
+            table.integer("route_id").unsigned().references("id").inTable("route");
+            table
+              .integer("destination_id")
+              .unsigned().references("id")
+              .inTable("destination");
+            table.timestamps(true, true);
+            return console.log("table route_destination successfully created");
+          });
+        } else {
+          return console.log("table route_destination already exists!");
+        }
+      })
+      .catch((err) => console.log(err));
+  },
+  createTableDestination: function () {
+    return db.schema
+      .hasTable("destination")
+      .then((exists) => {
+        if (!exists) {
+          return db.schema.createTable("destination", (table) => {
+            table.increments("id").primary();
+            table.integer("business_id").unsigned().references("id").inTable("business");
+            table.string("order_id").notNullable();
+            table.string("order_address").notNullable();
+            table.string("order_email").notNullable();
+            table.integer("status").defaultTo(0);
+            table.timestamps(true, true);
+            return console.log("table destination successfully created");
+          });
+        } else {
+          return console.log("table destination already exists!");
+        }
+      })
+      .catch((err) => console.log(err));
+  },
+  createTableHistory: function () {
+    return db.schema
+      .hasTable("history")
+      .then((exists) => {
+        if (!exists) {
+          return db.schema.createTable("history", (table) => {
+            table.increments("id").primary();
+            table.integer("route_id").unsigned().references("id").inTable("route");
+            table.timestamps(true, true);
+            return console.log("table history successfully created");
+          });
+        } else {
+          return console.log("table history already exists!");
         }
       })
       .catch((err) => console.log(err));

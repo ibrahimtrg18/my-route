@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -27,8 +27,13 @@ const LoginForm = () => {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(0);
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
+  const inputRef = useRef();
 
-  let history = useHistory();
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
   return (
     <LoginFormContainer>
       <Image src={require("../../assets/images/login.png")} />
@@ -72,6 +77,7 @@ const LoginForm = () => {
               <Input
                 name="email"
                 type="email"
+                ref={inputRef}
                 value={values.email}
                 onChange={handleChange}
               />

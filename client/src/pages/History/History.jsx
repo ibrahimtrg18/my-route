@@ -32,7 +32,7 @@ const CustomDatePicker = ({ value, onClick }) => {
 };
 
 const History = () => {
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const token = localStorage.getItem("token");
   const [date, setDate] = useState(new Date());
   const [employees] = useState([
     {
@@ -69,6 +69,7 @@ const History = () => {
   if (!token) {
     return <Redirect to="/login" />;
   }
+  
   return (
     <HistoryContainer>
       <LeftSide>

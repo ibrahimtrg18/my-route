@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import {
   EmployeeRegisterContainer,
   HeaderContainer,
@@ -9,6 +10,12 @@ import EmployeeRegisterForm from "../../components/EmployeeRegisterForm/Employee
 import Navbar from "../../components/Navbar/Navbar";
 
 const EmployeeRegister = () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return <Redirect to="/login" />;
+  }
+
   return (
     <>
       <Navbar employeeRegister={1} />

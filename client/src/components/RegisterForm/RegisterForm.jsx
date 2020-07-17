@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Formik } from "formik";
 import axios from "axios";
 import * as yup from "yup";
@@ -15,6 +15,7 @@ import {
   Actions,
   Button,
 } from "./RegisterForm.styles";
+import { useHistory } from "react-router-dom";
 
 const validationSchema = yup.object().shape({
   businessName: yup.string().required(),
@@ -25,13 +26,19 @@ const validationSchema = yup.object().shape({
     .matches(/^[0-9]+$/, "Must be only digits & no-space")
     .min(8)
     .max(20),
-  password: yup.string().required(),
+  password: yup.string().required().min(8),
 });
 
 const RegisterForm = () => {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(0);
   const [loading, setLoading] = useState(false);
+  const inputRef = useRef();
+  const history = useHistory();
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   return (
     <>
@@ -57,6 +64,7 @@ const RegisterForm = () => {
               setStatus(1);
               setLoading(false);
               resetForm();
+              history.push("/login");
             } catch (err) {
               setMessage(err.response.data.message);
               setStatus(0);
@@ -77,6 +85,7 @@ const RegisterForm = () => {
                 <Input
                   name="businessName"
                   type="text"
+                  ref={inputRef}
                   value={values.businessName}
                   onChange={handleChange}
                 />

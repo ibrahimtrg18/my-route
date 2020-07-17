@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import {
   LoginContainer,
   HeaderContainer,
@@ -9,6 +10,12 @@ import Navbar from "../../components/Navbar/Navbar";
 import LoginForm from "../../components/LoginForm/LoginForm";
 
 const Login = () => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    return <Redirect to="/onprogress" />;
+  }
+
   return (
     <>
       <Navbar login={1} />

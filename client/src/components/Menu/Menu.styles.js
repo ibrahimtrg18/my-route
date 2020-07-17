@@ -23,6 +23,10 @@ export const MenuItem = styled.li`
   @media (max-width: 600px) {
     margin-right: 24px;
   }
+  &:last-child{
+    margin-left: auto;
+    margin-right: 8px;
+  }
 `;
 
 export const MenuLink = styled(Link)`

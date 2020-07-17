@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -18,7 +18,7 @@ const validationSchema = yup.object().shape({
   name: yup.string().required(),
   customId: yup.string().required((obj) => "Employee ID is a required field"),
   email: yup.string().email().required(),
-  password: yup.string().required(),
+  password: yup.string().required().min(8),
   address: yup.string().required(),
   phoneNumber: yup
     .string()
@@ -33,8 +33,13 @@ const SERVER_URL = process.env.SERVER_URL || "http://localhost:4000";
 const EmployeeRegisterForm = () => {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(0);
+  const history = useHistory();
+  const inputRef = useRef();
 
-  let history = useHistory();
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
   return (
     <EmployeeRegisterFormContainer>
       <Image src={require("../../assets/images/login.png")} />
@@ -85,6 +90,7 @@ const EmployeeRegisterForm = () => {
               <Input
                 name="name"
                 type="text"
+                ref={inputRef}
                 value={values.name}
                 onChange={handleChange}
               />
@@ -155,7 +161,7 @@ const EmployeeRegisterForm = () => {
         <Button primary form="employee-register-form" type="submit">
           Register
         </Button>
-        <Button onClick={()=> history.goBack()}>Cancel</Button>
+        <Button onClick={() => history.goBack()}>Cancel</Button>
       </Actions>
     </EmployeeRegisterFormContainer>
   );

@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const validator = require("validator");
 const db = require("../config/database");
 const router = express.Router();
-const { isAuth } = require("../middleware/auth");
+const { isAuthBusiness } = require("../middleware/auth");
 
 router.post("/register", async (req, res) => {
   const { businessName, email, password, phoneNumber } = req.body;
@@ -16,7 +16,7 @@ router.post("/register", async (req, res) => {
         email.toLowerCase()
       );
       if (isEmailExist.length === 0) {
-        const id = await db("business").insert({
+        await db("business").insert({
           name: businessName,
           email: email.toLowerCase(),
           password,
@@ -61,9 +61,11 @@ router.post("/login", async (req, res) => {
 
   if (rows.length > 0) {
     if (rows[0].password == password) {
+      rows[0].roles = "business";
       const token = await jwt.sign(
         { payload: rows[0] },
-        process.env.ACCESS_TOKEN_SECRET
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "7d" }
       );
 
       return res.status(200).json({
@@ -90,8 +92,9 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/settings", isAuth, async (req, res) => {
+router.get("/settings", isAuthBusiness, async (req, res) => {
   const businessId = req.userId;
+
   try {
     const rows = await db
       .select("*")
@@ -100,7 +103,10 @@ router.get("/settings", isAuth, async (req, res) => {
     return res.status(200).json({
       code: res.statusCode,
       success: true,
-      data: rows[0],
+      data: {
+        business: rows[0],
+      },
+      message: "found the account",
     });
   } catch (err) {
     console.log(err);
@@ -112,7 +118,7 @@ router.get("/settings", isAuth, async (req, res) => {
   }
 });
 
-router.put("/settings", isAuth, async (req, res) => {
+router.put("/settings", isAuthBusiness, async (req, res) => {
   const businessId = req.userId;
   const {
     businessName,
@@ -121,6 +127,7 @@ router.put("/settings", isAuth, async (req, res) => {
     newPassword,
     prevPassword,
   } = req.body;
+
   try {
     const oldPassword = await db
       .select("password")
@@ -134,7 +141,7 @@ router.put("/settings", isAuth, async (req, res) => {
       .select("email")
       .from("employee")
       .where({ email: email });
-      console.log(isEmailInBusiness.length, isEmailInEmployee.length)
+    console.log(isEmailInBusiness.length, isEmailInEmployee.length);
     if (isEmailInBusiness.length <= 1 && isEmailInEmployee.length === 0) {
       if (oldPassword[0].password === prevPassword) {
         await db("business").where({ id: businessId }).update({
@@ -184,18 +191,7 @@ router.get("/q", async (req, res) => {
   }
 });
 
-router.get("/onprogress", isAuth, async (req, res) => {
-  try {
-    const rows = await db.select().from("business").where({ id: req.userId });
-    return res.status(200).json({ data: rows[0] });
-  } catch (err) {
-    return res.status(500).send(err);
-  }
-});
-
-router.get("/history", isAuth, async (_req, _res) => {});
-
-router.get("/employee", isAuth, async (req, res) => {
+router.get("/onprogress", isAuthBusiness, async (req, res) => {
   const businessId = req.userId;
 
   try {
@@ -203,7 +199,41 @@ router.get("/employee", isAuth, async (req, res) => {
       .select("employee_id")
       .from("business_employee")
       .where({ business_id: businessId });
-    const rows = await db
+    const rowsEmployeesOnWay = await db
+      .select("*")
+      .from("employee")
+      .whereIn(
+        "id",
+        rowsEmployeesId.map((employee) => {
+          return employee.employee_id;
+        })
+      )
+      .andWhere({ status: 1 });
+    return res.status(200).json({
+      code: res.statusCode,
+      success: true,
+      data: {
+        employee: rowsEmployeesOnWay[0],
+        message: `Employee onprogress ${rowsEmployeesOnWay.length}`,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send(err);
+  }
+});
+
+router.get("/history", isAuthBusiness, async (_req, _res) => {});
+
+router.get("/employee", isAuthBusiness, async (req, res) => {
+  const businessId = req.userId;
+
+  try {
+    const rowsEmployeesId = await db
+      .select("employee_id")
+      .from("business_employee")
+      .where({ business_id: businessId });
+    const rowsEmployees = await db
       .select("*")
       .from("employee")
       .whereIn(
@@ -215,8 +245,10 @@ router.get("/employee", isAuth, async (req, res) => {
     return res.status(200).json({
       code: res.statusCode,
       success: true,
-      data: rows,
-      message: `Found employee ${rows.length}`,
+      data: {
+        employee: rowsEmployees,
+      },
+      message: `Found employee ${rowsEmployees.length}`,
     });
   } catch (err) {
     return res.status(500).json({
@@ -227,7 +259,7 @@ router.get("/employee", isAuth, async (req, res) => {
   }
 });
 
-router.post("/employee/register", isAuth, async (req, res) => {
+router.post("/employee/register", isAuthBusiness, async (req, res) => {
   const { name, customId, email, password, phoneNumber, address } = req.body;
   const businessId = req.userId;
 
@@ -251,7 +283,7 @@ router.post("/employee/register", isAuth, async (req, res) => {
           phone_number: phoneNumber,
           address,
         });
-        const businessEmployeeId = await db("business_employee").insert({
+        await db("business_employee").insert({
           business_id: businessId,
           employee_id: employeeId,
         });

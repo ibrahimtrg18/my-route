@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
 import {
   EmployeeContainer,
@@ -28,10 +29,6 @@ const Employee = () => {
   const token = localStorage.getItem("token");
   const [employees, setEmployees] = useState([]);
   const [employee, setEmployee] = useState({});
-  const handleEmployeeClick = (employee) => {
-    setEmployee(employee);
-    console.log(employee);
-  };
 
   useEffect(() => {
     (async function () {
@@ -40,16 +37,24 @@ const Employee = () => {
           "x-token": token,
         },
       });
-      const data = await response.data.data.map((employee) => {
+      const employees = await response.data.data.employee.map((employee) => {
         employee.phone_number = employee.phone_number
           .match(/.{1,4}/g)
           .join(" ");
         return employee;
       });
-      setEmployees(data);
+      setEmployees(employees);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleEmployeeClick = (employee) => {
+    setEmployee(employee);
+  };
+
+  if (!token) {
+    return <Redirect to="/login" />;
+  }
 
   return (
     <EmployeeContainer>

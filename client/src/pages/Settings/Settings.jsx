@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import {
   SettingsContainer,
   HeaderContainer,
@@ -10,6 +11,12 @@ import SettingsForm from "../../components/SettingsForm/SettingsForm";
 import Menu from "../../components/Menu/Menu";
 
 const Settings = () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return <Redirect to="/login" />;
+  }
+
   return (
     <SettingsContainer>
       <HeaderContainer>

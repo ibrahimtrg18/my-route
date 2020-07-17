@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import {
   SignupContainer,
   HeaderContainer,
@@ -9,6 +10,12 @@ import Navbar from "../../components/Navbar/Navbar";
 import RegisterForm from "../../components/RegisterForm/RegisterForm";
 
 const Signup = () => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    return <Redirect to="/onprogress" />;
+  }
+
   return (
     <>
       <Navbar register={1} />

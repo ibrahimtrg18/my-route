@@ -16,6 +16,7 @@ const SERVER_URL = process.env.SERVER_URL || "http://localhost:4000";
 const SettingsForm = () => {
   const token = localStorage.getItem("token");
   const [data, setData] = useState({});
+
   useEffect(() => {
     (async function () {
       try {
@@ -27,8 +28,9 @@ const SettingsForm = () => {
             },
           }
         );
-        console.log(response.data.data);
-        setData(response.data.data);
+        console.log(response.data);
+        const businessSettings = response.data.data.business;
+        setData(businessSettings);
       } catch (err) {
         console.log(err.response);
       }

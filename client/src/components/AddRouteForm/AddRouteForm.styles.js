@@ -7,9 +7,10 @@ export const AddRouteFormContainer = styled.div`
 export const Form = styled.form``;
 
 export const Group = styled.div`
+  ${(props) => console.log(props)}
   display: grid;
-  grid-template-columns: repeat(2, auto);
-  grid-column-gap: 48px;
+  grid-template-columns: ${(props) => props.size.join(" ")};
+  column-gap: ${(props) => props.gap};
 `;
 
 export const Label = styled.label`
