@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   AddRouteContainer,
   LeftSide,
@@ -7,45 +8,82 @@ import {
   Divider,
 } from "./AddRoute.styles";
 import AddRouteForm from "../../components/AddRouteForm/AddRouteForm";
-import DistanceCard from "../../components/DistanceCard/DistanceCard";
+import DestinationCard from "../../components/Destination/DestinationCard";
 import EmployeeStandby from "../../components/EmployeeStandby/EmployeeStandby";
 
-const AddRoute = () => {
-  const [distances, setDistances] = useState([
-    {
-      id: 1,
-      idItem: "AF100001",
-      address: "Alamat 1",
-      email: "example1@gmail.com",
-      action: 0,
-    },
-    {
-      id: 2,
-      idItem: "AF100002",
-      address: "Alamat 2",
-      email: "example2@gmail.com",
-      action: 0,
-    },
-    {
-      id: 3,
-      idItem: "AF100003",
-      address: "Alamat 3",
-      email: "example3@gmail.com",
-      action: 1,
-    },
-  ]);
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
 
-  const handleSetAction = (id) => {
-    setDistances(
-      distances.map((distance) => {
-        if (distance.id == id) {
-          distance.action = distance.action ? 0 : 1;
-        }
-        return distance;
-      })
+const AddRoute = () => {
+  const token = localStorage.getItem("token");
+  const [destinations, setDestinations] = useState([]);
+  const [selectedDestination, setSelectedDestination] = useState([]);
+  const [employee, setEmployee] = useState({});
+  const [employees, setEmployees] = useState([]);
+
+  const updateSelectedDestination = (destination) => {
+    const selected = selectedDestination.find(
+      (selected) => selected.id == destination.id
     );
+    if (!selected) {
+      setSelectedDestination([...selectedDestination, { id: destination.id }]);
+    } else {
+      setSelectedDestination(
+        selectedDestination.filter((selected) => selected.id !== destination.id)
+      );
+    }
   };
-  
+
+  const selectEmployee = async ({ id }) => {
+    const data = { id, destination: selectedDestination };
+    try {
+      const response = await axios.post(
+        `${SERVER_URL}/api/business/route`,
+        data,
+        {
+          headers: {
+            "x-token": token,
+          },
+        }
+      );
+      console.log(response.data);
+    } catch (err) {
+      console.error(err.response);
+    }
+  };
+
+  useEffect(() => {
+    (async function () {
+      try {
+        const response = await axios.get(
+          `${SERVER_URL}/api/business/destination`,
+          {
+            headers: {
+              "x-token": token,
+            },
+          }
+        );
+        setDestinations(response.data.data.destination);
+      } catch (err) {
+        console.error(err.response);
+      }
+    })();
+    (async function () {
+      try {
+        const response = await axios.get(
+          `${SERVER_URL}/api/business/employee/standby`,
+          {
+            headers: {
+              "x-token": token,
+            },
+          }
+        );
+        setEmployees(response.data.data.employee);
+      } catch (err) {
+        console.error(err.response);
+      }
+    })();
+  }, []);
+
   return (
     <AddRouteContainer>
       <LeftSide>
@@ -56,15 +94,16 @@ const AddRoute = () => {
         </HeaderContainer>
         <AddRouteForm />
         <Divider />
-        {distances.map((distance, index) => (
-          <DistanceCard
+        {destinations.map((destination, index) => (
+          <DestinationCard
             key={index}
-            distance={{ index, ...distance }}
-            handleSetAction={handleSetAction}
+            destination={{ index, ...destination }}
+            selectedDestination={selectedDestination}
+            updateSelectedDestination={updateSelectedDestination}
           />
         ))}
       </LeftSide>
-      <EmployeeStandby />
+      <EmployeeStandby employees={employees} selectEmployee={selectEmployee} />
     </AddRouteContainer>
   );
 };

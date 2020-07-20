@@ -1,5 +1,5 @@
 require("dotenv").config();
-const express = require("express");
+const app = require("express")();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const {
@@ -12,27 +12,20 @@ const {
   createTableHistory,
 } = require("./config/schema");
 
+createTableBusiness();
+createTableEmployee();
+createTableBusinessEmployee();
+createTableRoute();
+createTableDestination();
+createTableRouteDestination();
+createTableHistory();
+
 const PORT = process.env.PORT || 4000;
-const app = express();
 
-const routeBusiness = require("./routes/business");
-const routeEmployee = require("./routes/employee");
-
-app.use(cors());
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cors());
 
-function createTable() {
-  createTableBusiness();
-  createTableEmployee();
-  createTableBusinessEmployee();
-  createTableRoute();
-  createTableDestination();
-  createTableRouteDestination();
-  createTableHistory();
-}
-createTable();
-app.use("/api/business", routeBusiness);
-app.use("/api/employee", routeEmployee);
+app.use("/", require("./routes/index"));
 
 app.listen(PORT, () => console.log(`Server is running at ${PORT}`));

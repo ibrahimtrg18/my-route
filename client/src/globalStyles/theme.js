@@ -12,6 +12,7 @@ const theme = {
   inputBackground: "#F5F6F8",
   primaryBackground: "#FFFFFF",
   secondaryBackground: "#F5F5F5",
+  tertiaryBackground: "#FAFAFA",
   primaryButton: "#3252DF",
   primaryDarkButton: "#182E94",
   secondaryButton: "#ffffff",

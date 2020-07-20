@@ -19,7 +19,7 @@ export const LeftSide = styled.div`
 
 export const HeaderContainer = styled.div`
   margin-top: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
   @media (max-width: 600px) {
     margin-bottom: 16px;
   }
@@ -31,7 +31,6 @@ export const Brand = styled(Link)`
   color: ${(props) => props.theme.darkColor};
   font-size: 21px;
   font-weight: 500;
-  margin-bottom: 32px;
   cursor: pointer;
   & > span {
     color: ${(props) => props.theme.primaryColor};

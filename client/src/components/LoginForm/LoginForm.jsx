@@ -21,7 +21,7 @@ const validationSchema = yup.object().shape({
   password: yup.string().required(),
 });
 
-const SERVER_URL = process.env.SERVER_URL || "http://localhost:4000";
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
 
 const LoginForm = () => {
   const [message, setMessage] = useState("");

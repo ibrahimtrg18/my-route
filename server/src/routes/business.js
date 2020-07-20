@@ -199,23 +199,23 @@ router.get("/onprogress", isAuthBusiness, async (req, res) => {
       .select("employee_id")
       .from("business_employee")
       .where({ business_id: businessId });
+
     const rowsEmployeesOnWay = await db
       .select("*")
       .from("employee")
       .whereIn(
         "id",
-        rowsEmployeesId.map((employee) => {
-          return employee.employee_id;
-        })
+        rowsEmployeesId.map((employee) => employee.employee_id)
       )
       .andWhere({ status: 1 });
+
     return res.status(200).json({
       code: res.statusCode,
       success: true,
       data: {
-        employee: rowsEmployeesOnWay[0],
-        message: `Employee onprogress ${rowsEmployeesOnWay.length}`,
+        employee: rowsEmployeesOnWay,
       },
+      message: `Employee on way ${rowsEmployeesOnWay.length}`,
     });
   } catch (err) {
     console.log(err);
@@ -307,6 +307,139 @@ router.post("/employee/register", isAuthBusiness, async (req, res) => {
       });
     }
   } catch (err) {
+    return res.status(500).json({
+      code: res.statusCode,
+      success: false,
+      message: err,
+    });
+  }
+});
+
+router.get("/employee/standby", isAuthBusiness, async (req, res) => {
+  const businessId = req.userId;
+
+  try {
+    const rowsEmployeesId = await db
+      .select("employee_id")
+      .from("business_employee")
+      .where({ business_id: businessId });
+
+    const rowsEmployeeStandby = await db
+      .select("*")
+      .from("employee")
+      .whereIn(
+        "id",
+        rowsEmployeesId.map((employee) => employee.employee_id)
+      )
+      .andWhere({ status: 0 });
+
+    return res.status(200).json({
+      code: res.statusCode,
+      success: true,
+      data: {
+        employee: rowsEmployeeStandby,
+      },
+      message: `Employee standby ${rowsEmployeeStandby.length}`,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      code: res.statusCode,
+      success: false,
+      message: err,
+    });
+  }
+});
+
+router.post("/route", isAuthBusiness, async (req, res) => {
+  const businessId = req.userId;
+  const { employeeId, destination } = req.body;
+
+  try {
+    const routeId = await db("route").insert({
+      business_id: businessId,
+      employee_id: employeeId,
+    });
+
+    const fieldToInsert = destination.map((dest) => ({
+      route_id: routeId,
+      destination_id: dest.id,
+    }));
+
+    await db("route_destination").insert(fieldToInsert);
+
+    return res.status(200).json({
+      code: res.statusCode,
+      success: true,
+      message: "successfully create destination of route",
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      code: res.statusCode,
+      success: false,
+      message: err,
+    });
+  }
+});
+
+router.get("/destination", isAuthBusiness, async (req, res) => {
+  const businessId = req.userId;
+
+  try {
+    const rowsDestination = await db
+      .select("*")
+      .from("destination")
+      .where({ business_id: businessId });
+
+    return res.status(200).json({
+      code: res.statusCode,
+      success: true,
+      data: {
+        destination: rowsDestination,
+      },
+      message: `found ${rowsDestination.length} destination`,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      code: res.statusCode,
+      success: false,
+      message: err,
+    });
+  }
+});
+
+router.post("/destination", isAuthBusiness, async (req, res) => {
+  const {
+    address,
+    coordinate: { lat, lng },
+    zipCode,
+    phoneNumber,
+    itemId,
+    email,
+  } = req.body;
+  const businessId = req.userId;
+
+  try {
+    await db("destination").insert({
+      business_id: businessId,
+      lat,
+      lng,
+      zip_code: zipCode,
+      order_id: itemId,
+      order_address: address,
+      order_email: email,
+      order_phone_number: phoneNumber,
+    });
+
+    return res.status(200).json({
+      code: res.statusCode,
+      success: false,
+      message: "successfully create destination",
+    });
+  } catch (err) {
+    console.log(err);
     return res.status(500).json({
       code: res.statusCode,
       success: false,

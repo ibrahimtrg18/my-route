@@ -28,7 +28,7 @@ const validationSchema = yup.object().shape({
     .max(20),
 });
 
-const SERVER_URL = process.env.SERVER_URL || "http://localhost:4000";
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
 
 const EmployeeRegisterForm = () => {
   const [message, setMessage] = useState("");
@@ -55,7 +55,6 @@ const EmployeeRegisterForm = () => {
         }}
         validationSchema={validationSchema}
         onSubmit={async (data, { resetForm }) => {
-          console.log(data);
           try {
             const response = await axios.post(
               `${SERVER_URL}/api/business/employee/register`,

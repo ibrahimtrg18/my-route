@@ -23,7 +23,7 @@ import Menu from "../../components/Menu/Menu";
 import EmployeeDetail from "../../components/EmployeeDetail/EmployeeDetail";
 import { ReactComponent as Add } from "../../assets/icons/add-circle.svg";
 
-const SERVER_URL = process.env.SERVER_URL || "http://localhost:4000";
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
 
 const Employee = () => {
   const token = localStorage.getItem("token");

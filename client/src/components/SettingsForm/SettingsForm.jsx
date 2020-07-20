@@ -11,7 +11,7 @@ import {
   Button,
 } from "./SettingsForm.styles";
 
-const SERVER_URL = process.env.SERVER_URL || "http://localhost:4000";
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
 
 const SettingsForm = () => {
   const token = localStorage.getItem("token");

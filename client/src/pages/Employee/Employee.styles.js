@@ -157,7 +157,7 @@ export const Status = styled.div`
     border-radius: 50%;
     margin-right: 4px;
     background-color: ${(props) =>
-      props.status ? props.theme.primaryColor : props.theme.dangerColor};
+      props.status ? props.theme.dangerColor : props.theme.primaryColor};
   }
 `;
 

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const DistanceCardContainer = styled.div`
+export const DestinationCardContainer = styled.div`
   display: grid;
   grid-template-columns: auto 20% 40% 30% auto;
   grid-column-gap: auto;
@@ -20,7 +20,7 @@ export const DistanceCardContainer = styled.div`
   }
 `;
 
-export const DistanceIndex = styled.div`
+export const DestinationIndex = styled.div`
   padding: 8px;
   width: 38px;
   background-color: ${(props) => props.theme.primaryColor};
@@ -28,20 +28,20 @@ export const DistanceIndex = styled.div`
   color: ${(props) => props.theme.whiteColor};
 `;
 
-export const DistanceIdItem = styled.div`
+export const DestinationIdItem = styled.div`
   justify-self: left;
   padding: 4px 8px;
 `;
 
-export const DistanceAddress = styled.div`
+export const DestinationAddress = styled.div`
   padding: 4px 8px;
 `;
 
-export const DistanceEmail = styled.div`
+export const DestinationEmail = styled.div`
   padding: 4px 8px;
 `;
 
-export const DistanceAction = styled.button`
+export const DestinationAction = styled.button`
   justify-self: right;
   padding: 8px;
   width: 38px;

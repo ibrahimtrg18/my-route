@@ -3,8 +3,8 @@
 [Stack](#Stack)\
 [Installation](#Installation)\
 [Usage](#Usage)\
-[LIST API](#list%20api)\
-[REST API](#rest%20api)
+[LIST API](#list-api)\
+[REST API](#rest-api)
 
 ## Stack
 

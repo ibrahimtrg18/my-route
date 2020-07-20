@@ -22,7 +22,7 @@ import {
 import EmployeeRoute from "../../components/EmployeeRoute/EmployeeRoute";
 import Menu from "../../components/Menu/Menu";
 
-const SERVER_URL = process.env.SERVER_URL || "http://localhost:4000";
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
 
 const OnProgress = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Combobox } from "@reach/combobox";
 
 export const AddRouteFormContainer = styled.div`
   margin-bottom: 32px;
@@ -7,7 +8,6 @@ export const AddRouteFormContainer = styled.div`
 export const Form = styled.form``;
 
 export const Group = styled.div`
-  ${(props) => console.log(props)}
   display: grid;
   grid-template-columns: ${(props) => props.size.join(" ")};
   column-gap: ${(props) => props.gap};
@@ -38,6 +38,9 @@ export const Input = styled.input`
   &:focus {
     border: solid 2px ${(props) => props.theme.primaryButton};
     background-color: ${(props) => props.theme.primaryBackground};
+  }
+  &:disabled {
+    background-color: ${(props) => props.theme.tertiaryBackground};
   }
 `;
 

@@ -29,8 +29,16 @@ module.exports = {
         if (!exists) {
           return db.schema.createTable("business_employee", (table) => {
             table.increments("id").primary();
-            table.integer("business_id").unsigned().references("id").inTable("business");
-            table.integer("employee_id").unsigned().references("id").inTable("employee");
+            table
+              .integer("business_id")
+              .unsigned()
+              .references("id")
+              .inTable("business");
+            table
+              .integer("employee_id")
+              .unsigned()
+              .references("id")
+              .inTable("employee");
             table.timestamps(true, true);
             return console.log("table business_employee successfully created");
           });
@@ -72,7 +80,16 @@ module.exports = {
         if (!exists) {
           return db.schema.createTable("route", (table) => {
             table.increments("id").primary();
-            table.integer("employee_id").unsigned().references("id").inTable("employee");
+            table
+              .integer("business_id")
+              .unsigned()
+              .references("id")
+              .inTable("business");
+            table
+              .integer("employee_id")
+              .unsigned()
+              .references("id")
+              .inTable("employee");
             table.integer("status").defaultTo(0);
             table.timestamps(true, true);
             return console.log("table route successfully created");
@@ -90,10 +107,15 @@ module.exports = {
         if (!exists) {
           return db.schema.createTable("route_destination", (table) => {
             table.increments("id").primary();
-            table.integer("route_id").unsigned().references("id").inTable("route");
+            table
+              .integer("route_id")
+              .unsigned()
+              .references("id")
+              .inTable("route");
             table
               .integer("destination_id")
-              .unsigned().references("id")
+              .unsigned()
+              .references("id")
               .inTable("destination");
             table.timestamps(true, true);
             return console.log("table route_destination successfully created");
@@ -111,10 +133,18 @@ module.exports = {
         if (!exists) {
           return db.schema.createTable("destination", (table) => {
             table.increments("id").primary();
-            table.integer("business_id").unsigned().references("id").inTable("business");
+            table
+              .integer("business_id")
+              .unsigned()
+              .references("id")
+              .inTable("business");
+            table.decimal("lat", 8, 6).notNullable();
+            table.decimal("lng", 9, 6).notNullable();
+            table.string("zip_code", 20).notNullable();
             table.string("order_id").notNullable();
             table.string("order_address").notNullable();
             table.string("order_email").notNullable();
+            table.string("order_phone_number").notNullable();
             table.integer("status").defaultTo(0);
             table.timestamps(true, true);
             return console.log("table destination successfully created");
@@ -132,7 +162,11 @@ module.exports = {
         if (!exists) {
           return db.schema.createTable("history", (table) => {
             table.increments("id").primary();
-            table.integer("route_id").unsigned().references("id").inTable("route");
+            table
+              .integer("route_id")
+              .unsigned()
+              .references("id")
+              .inTable("route");
             table.timestamps(true, true);
             return console.log("table history successfully created");
           });
