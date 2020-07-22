@@ -92,7 +92,6 @@ function MapDirectionsRenderer(props) {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-<<<<<<< HEAD
     try {
       const { places, travelMode, location } = props;
 
@@ -123,34 +122,6 @@ function MapDirectionsRenderer(props) {
       console.log(err);
     }
   }, [props.places]);
-=======
-    const { places, travelMode, location } = props;
-
-    const waypoints = places.map((p) => ({
-      location: { lat: p.marker.lat, lng: p.marker.lng },
-      stopover: true,
-    }));
-    // const origin = waypoints.shift().location;
-    const destination = waypoints.pop().location;
-
-    const directionsService = new google.maps.DirectionsService();
-    directionsService.route(
-      {
-        origin: location,
-        destination: destination,
-        travelMode: travelMode,
-        waypoints: waypoints,
-      },
-      (result, status) => {
-        if (status === google.maps.DirectionsStatus.OK) {
-          setDestination(result);
-        } else {
-          setError(result);
-        }
-      }
-    );
-  }, [null, props.places]);
->>>>>>> 3ac3965b0b44637231fbd6563d60068384030435
 
   if (directions) {
     return directions && <DirectionsRenderer directions={directions} />;

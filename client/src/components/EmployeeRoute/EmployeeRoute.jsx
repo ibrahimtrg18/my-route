@@ -54,11 +54,7 @@ const EmployeeRoute = (props) => {
           </div>
         </EmployeeContainer>
         <MapContainer>
-<<<<<<< HEAD
           <Map destinations={destinations} />
-=======
-          {/* {isLoading ? "Loading..." : <Map destinations={destinations} />} */}
->>>>>>> 3ac3965b0b44637231fbd6563d60068384030435
           <AddDestination
             to={`/destination/${
               props.employee.route && props.employee.route.id
