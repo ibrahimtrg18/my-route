@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import moment from "moment";
 import { useHistory, Redirect } from "react-router-dom";
 import { ReactComponent as Add } from "../../assets/icons/add-circle.svg";
 import {
@@ -27,34 +28,14 @@ const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
 const OnProgress = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [pageLoading, setPageLoading] = useState(true);
-  const [employees, setEmployees] = useState([
-    {
-      avatar: "../../assets/images/avatar.png",
-      name: "Ibrahim Tarigan",
-      customId: "AF1020DC3040",
-      date: "17 Mei 2020",
-      time: "09 : 30",
-      distance: 42,
-    },
-    {
-      avatar: "../../assets/images/avatar.png",
-      name: "Jonatan Prima",
-      customId: "AF1020DC1234",
-      date: "17 Mei 2020",
-      time: "09 : 30",
-      distance: 43,
-    },
-    {
-      avatar: "../../assets/images/avatar.png",
-      name: "Anggiat Pasaribu",
-      customId: "AF1020DC4321",
-      date: "17 Mei 2020",
-      time: "09 : 30",
-      distance: 44,
-    },
-  ]);
+  const [employee, setEmployee] = useState({});
+  const [employees, setEmployees] = useState([]);
   const history = useHistory();
 
+  const handleEmployeeClick = (employee) => {
+    setEmployee(employee);
+  };
+  
   useEffect(() => {
     if (!token) history.push("/login");
   }, [token]);
@@ -63,14 +44,14 @@ const OnProgress = () => {
     (async () => {
       try {
         const response = await axios.get(
-          `${SERVER_URL}/api/business/onprogress`,
+          `${SERVER_URL}/api/business/employee/onway`,
           {
             headers: {
               "x-token": token,
             },
           }
         );
-        console.log(response);
+        setEmployees(response.data.data.employees);
       } catch (err) {
         console.log(err);
         localStorage.removeItem("token");
@@ -79,12 +60,6 @@ const OnProgress = () => {
       setPageLoading(false);
     })();
   }, []);
-
-  const [employee, setEmployee] = useState({});
-  const handleEmployeeClick = (employee) => {
-    setEmployee(employee);
-    console.log(employee);
-  };
 
   if (!token) {
     return <Redirect to="/login" />;
@@ -113,17 +88,23 @@ const OnProgress = () => {
               {employees.map((emp) => {
                 return (
                   <Employee
-                    key={emp.customId}
-                    customId={emp.customId}
-                    active={employee.customId}
-                    onClick={() => handleEmployeeClick(emp)}
+                    key={emp.employee.id}
+                    id={emp.employee.id}
+                    active={employee.id}
+                    onClick={() => handleEmployeeClick(emp.employee)}
                   >
                     <Avatar src={require("../../assets/images/avatar.png")} />
-                    <Name>{emp.name}</Name>
-                    <CustomId>{emp.customId}</CustomId>
-                    <Date>{emp.date}</Date>
-                    <Time>{emp.time}</Time>
-                    <Distance>{emp.distance}KM</Distance>
+                    <Name>{emp.employee.name}</Name>
+                    <CustomId>{emp.employee.custom_id}</CustomId>
+                    <Date>
+                      {moment(emp.employee.route.created_at).format(
+                        "DD MMMM YYYY"
+                      )}
+                    </Date>
+                    <Time>
+                      {moment(emp.employee.route.created_at).format("hh:mm")}
+                    </Time>
+                    <Distance>{emp.employee.total_distance} KM</Distance>
                   </Employee>
                 );
               })}

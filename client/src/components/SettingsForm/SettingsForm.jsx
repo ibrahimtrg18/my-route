@@ -28,11 +28,10 @@ const SettingsForm = () => {
             },
           }
         );
-        console.log(response.data);
         const businessSettings = response.data.data.business;
         setData(businessSettings);
       } catch (err) {
-        console.log(err.response);
+        console.log(err);
       }
     })();
   }, []);
@@ -59,7 +58,6 @@ const SettingsForm = () => {
                 },
               }
             );
-            console.log(response.data);
             setData({
               name: data.businessName,
               phone_number: data.phoneNumber,

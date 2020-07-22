@@ -16,6 +16,7 @@ import Employee from "../pages/Employee/Employee";
 import EmployeeRegister from "../pages/EmployeeRegister/EmployeeRegister";
 import AddRoute from "../pages/AddRoute/AddRoute";
 import Settings from "../pages/Settings/Settings";
+import Destination from "../pages/Destination/Destination";
 
 const Routes = () => {
   return (
@@ -29,7 +30,7 @@ const Routes = () => {
         />
         <PrivateRoute exact path="/employee" component={Employee} />
         <PrivateRoute exact path="/history" component={History} />
-        {/* {/* <Route exact path="/destination" component={} /> */}
+        <PrivateRoute exact path="/destination/:routeId" component={Destination} />
         <PrivateRoute exact path="/route/add" component={AddRoute} />
         <PrivateRoute exact path="/onprogress" component={OnProgress} />
         <Route exact path="/register" component={Register} />

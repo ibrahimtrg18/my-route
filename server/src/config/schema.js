@@ -13,6 +13,8 @@ module.exports = {
             table.string("password").notNullable();
             table.string("phone_number").notNullable();
             table.string("address");
+            table.decimal("lat", 8, 6);
+            table.decimal("lng", 9, 6);
             table.timestamps(true, true);
             return console.log("table business successfully created");
           });
@@ -60,7 +62,9 @@ module.exports = {
             table.string("email").notNullable();
             table.string("password").notNullable();
             table.string("phone_number").notNullable();
-            table.string("address").notNullable();
+            table.string("address");
+            table.decimal("lat", 8, 6);
+            table.decimal("lng", 9, 6);
             table.integer("status").defaultTo(0);
             table.integer("total_route", 11).defaultTo(0);
             table.integer("total_distance", 11).defaultTo(0);
@@ -145,7 +149,8 @@ module.exports = {
             table.string("order_address").notNullable();
             table.string("order_email").notNullable();
             table.string("order_phone_number").notNullable();
-            table.integer("status").defaultTo(0);
+            table.integer("status", 1).defaultTo(0);
+            table.integer("taken", 1).defaultTo(0);
             table.timestamps(true, true);
             return console.log("table destination successfully created");
           });

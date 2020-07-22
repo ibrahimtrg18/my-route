@@ -3,10 +3,10 @@ import { EmployeeRouteContainer } from "../../components/EmployeeRoute/EmployeeR
 import { Link } from "react-router-dom";
 
 export const OnProgressContainer = styled.div`
-  display: flex;
   background-color: ${(props) => props.theme.secondaryBackground};
-  ${EmployeeRouteContainer} {
-  }
+  display: flex;
+  height: 100%;
+  min-height: 100vh;
 `;
 
 export const LeftSide = styled.div`
@@ -62,9 +62,10 @@ export const Banner = styled.img`
 `;
 
 export const Button = styled(Link)`
-  position: absolute;
+  position: relative;
+  display: inline-flex !important;
   left: 24px;
-  bottom: 24px;
+  top: -60px;
   background-color: ${(props) => props.theme.primaryButton};
   box-shadow: ${(props) => props.theme.boxShadowButton};
   font-family: "Poppins", sans-serif;
@@ -95,7 +96,7 @@ export const EmployeeList = styled.div``;
 export const Employee = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 10% 30% 30% 10% 10% 10%;
+  grid-template-columns: 10% 25% 25% 15% 15% 10%;
   grid-column-gap: auto;
   text-align: center;
   overflow-x: auto;
@@ -108,12 +109,12 @@ export const Employee = styled.div`
   cursor: pointer;
   &:hover {
     background-color: ${(props) =>
-      props.customId === props.active
+      props.id === props.active
         ? props.theme.secondaryBackground
         : props.theme.primaryBackground};
   }
   background-color: ${(props) =>
-    props.customId === props.active
+    props.id === props.active
       ? props.theme.primaryBackground
       : props.theme.secondaryBackground};
   @media (max-width: 600px) {
@@ -129,12 +130,27 @@ export const Avatar = styled.img`
   height: 48px;
 `;
 
-export const Name = styled.div``;
+export const Name = styled.div`
+  font-size: 14;
+  font-weight: 400;
+`;
 
-export const CustomId = styled.div``;
+export const CustomId = styled.div`
+  font-size: 14;
+  font-weight: 600;
+`;
 
-export const Date = styled.div``;
+export const Date = styled.div`
+  font-size: 14;
+  font-weight: 400;
+`;
 
-export const Time = styled.div``;
+export const Time = styled.div`
+  font-size: 14;
+  font-weight: 400;
+`;
 
-export const Distance = styled.div``;
+export const Distance = styled.div`
+  font-size: 14;
+  font-weight: 400;
+`;

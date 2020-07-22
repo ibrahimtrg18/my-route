@@ -61,15 +61,15 @@ const History = () => {
     },
   ]);
   const [employee, setEmployee] = useState({});
+
   const handleEmployeeClick = (employee) => {
     setEmployee(employee);
-    console.log(employee);
   };
 
   if (!token) {
     return <Redirect to="/login" />;
   }
-  
+
   return (
     <HistoryContainer>
       <LeftSide>
