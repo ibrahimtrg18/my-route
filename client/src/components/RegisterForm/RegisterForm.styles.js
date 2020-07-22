@@ -110,3 +110,23 @@ export const Paragraph = styled.p`
   font-weight: 300;
   font-size: 16px;
 `;
+
+export const Group = styled.div`
+  display: grid;
+  grid-template-columns: ${(props) => props.size.join(" ")};
+  column-gap: ${(props) => props.gap};
+`;
+
+export const DetectType = styled.div`
+  display: flex;
+`;
+
+export const IconContainer = styled.div`
+  display: flex;
+  background-color: ${(props) => props.theme.primaryColor};
+  align-self: center;
+  border-radius: 8px;
+  padding: 8px;
+  margin-left: 8px;
+  cursor: pointer;
+`;

@@ -2,8 +2,12 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 export const EmployeeContainer = styled.div`
-  display: flex;
   background-color: ${(props) => props.theme.secondaryBackground};
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-width: 100vw;
+  min-height: 100vh;
 `;
 
 export const LeftSide = styled.div`
@@ -58,9 +62,10 @@ export const Banner = styled.img`
 `;
 
 export const Button = styled(Link)`
-  position: absolute;
+  position: relative;
+  display: inline-flex !important;
   left: 24px;
-  bottom: 24px;
+  top: -60px;
   background-color: ${(props) => props.theme.primaryButton};
   box-shadow: ${(props) => props.theme.boxShadowButton};
   font-family: "Poppins", sans-serif;

@@ -6,7 +6,15 @@ const router = express.Router();
 const { isAuthBusiness } = require("../middleware/auth");
 
 router.post("/register", async (req, res) => {
-  const { businessName, email, password, phoneNumber } = req.body;
+  console.log(req.body)
+  const {
+    businessName,
+    email,
+    password,
+    address,
+    location: { lat, lng },
+    phoneNumber,
+  } = req.body;
 
   try {
     const emailValid = await validator.isEmail(email);
@@ -20,6 +28,9 @@ router.post("/register", async (req, res) => {
           name: businessName,
           email: email.toLowerCase(),
           password,
+          address,
+          lat,
+          lng,
           phone_number: phoneNumber,
         });
         return res.status(201).json({
@@ -179,47 +190,29 @@ router.put("/settings", isAuthBusiness, async (req, res) => {
   }
 });
 
-router.get("/q", async (req, res) => {
-  const id = req.query.id;
-
-  if (!id) {
-    const rows = await db.select().from("business");
-    return res.status(200).json({ data: rows });
-  } else {
-    const rows = await db.select().from("business").where({ id });
-    return res.status(200).json({ data: rows[0] });
-  }
-});
-
-router.get("/onprogress", isAuthBusiness, async (req, res) => {
+router.get("/location", isAuthBusiness, async (req, res) => {
   const businessId = req.userId;
 
   try {
-    const rowsEmployeesId = await db
-      .select("employee_id")
-      .from("business_employee")
-      .where({ business_id: businessId });
-
-    const rowsEmployeesOnWay = await db
-      .select("*")
-      .from("employee")
-      .whereIn(
-        "id",
-        rowsEmployeesId.map((employee) => employee.employee_id)
-      )
-      .andWhere({ status: 1 });
-
+    const location = await db
+      .select("lat", "lng")
+      .from("business")
+      .where({ id: businessId });
     return res.status(200).json({
       code: res.statusCode,
       success: true,
       data: {
-        employee: rowsEmployeesOnWay,
+        location: location[0],
       },
-      message: `Employee on way ${rowsEmployeesOnWay.length}`,
+      message: "succesfully get location",
     });
   } catch (err) {
     console.log(err);
-    return res.status(500).send(err);
+    return res.status(500).json({
+      code: res.statusCode,
+      success: false,
+      message: err,
+    });
   }
 });
 
@@ -351,6 +344,54 @@ router.get("/employee/standby", isAuthBusiness, async (req, res) => {
   }
 });
 
+router.get("/employee/onway", isAuthBusiness, async (req, res) => {
+  const businessId = req.userId;
+
+  try {
+    const rowsEmployeesId = await db
+      .select("employee_id")
+      .from("business_employee")
+      .where({ business_id: businessId });
+
+    const rowsEmployeesOnWay = await db
+      .select("*")
+      .from("employee")
+      .whereIn(
+        "id",
+        rowsEmployeesId.map((employee) => employee.employee_id)
+      )
+      .andWhere({ status: 1 });
+
+    const results = await Promise.all(
+      rowsEmployeesOnWay.map(async (emp) => {
+        const employee = await emp;
+        const route = await db
+          .select("*")
+          .from("route")
+          .where({ employee_id: emp.id });
+        return {
+          employee: {
+            ...employee,
+            route: route[0],
+          },
+        };
+      })
+    );
+
+    return res.status(200).json({
+      code: res.statusCode,
+      success: true,
+      data: {
+        employees: results,
+      },
+      message: `Employee on way ${rowsEmployeesOnWay.length}`,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send(err);
+  }
+});
+
 router.post("/route", isAuthBusiness, async (req, res) => {
   const businessId = req.userId;
   const { employeeId, destination } = req.body;
@@ -361,12 +402,19 @@ router.post("/route", isAuthBusiness, async (req, res) => {
       employee_id: employeeId,
     });
 
-    const fieldToInsert = destination.map((dest) => ({
+    const fieldDestinationToInsert = destination.map((dest) => ({
       route_id: routeId,
       destination_id: dest.id,
     }));
 
-    await db("route_destination").insert(fieldToInsert);
+    await db("route_destination").insert(fieldDestinationToInsert);
+    await db("destination")
+      .whereIn(
+        "id",
+        destination.map((dest) => dest.id)
+      )
+      .update({ taken: 1 });
+    await db("employee").where({ id: employeeId }).update({ status: 1 });
 
     return res.status(200).json({
       code: res.statusCode,
@@ -383,6 +431,112 @@ router.post("/route", isAuthBusiness, async (req, res) => {
   }
 });
 
+router.put("/route/:routeId", isAuthBusiness, async (req, res) => {
+  const businessId = req.userId;
+  const { routeId } = req.params;
+  const { destination } = req.body;
+
+  try {
+    const fieldDestinationToInsert = destination.map((dest) => ({
+      route_id: routeId,
+      destination_id: dest.id,
+    }));
+
+    await db("route_destination").insert(fieldDestinationToInsert);
+    await db("destination")
+      .whereIn(
+        "id",
+        destination.map((dest) => dest.id)
+      )
+      .update({ taken: 1 });
+    return res.status(200).json({
+      code: res.statusCode,
+      success: true,
+      message: `successfully add destination of route ${routeId}`,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      code: res.statusCode,
+      success: false,
+      message: err,
+    });
+  }
+});
+
+router.get(
+  "/employee/:employeeId/route/:routeId",
+  isAuthBusiness,
+  async (req, res) => {
+    const businessId = req.userId;
+    const { employeeId, routeId } = req.params;
+
+    try {
+      const rowsDestination = await db
+        .select("destination_id as destinationId")
+        .from("route_destination")
+        .where({ route_id: routeId });
+      const results = await db
+        .select("*")
+        .from("destination")
+        .whereIn(
+          "id",
+          rowsDestination.map((dest) => dest.destinationId)
+        );
+
+      return res.status(200).json({
+        code: res.statusCode,
+        success: true,
+        data: {
+          destination: results,
+        },
+        message: `destination ${results.length}`,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+router.delete(
+  "/route/:routeId/destination/:destinationId",
+  isAuthBusiness,
+  async (req, res) => {
+    const { routeId, destinationId } = req.params;
+    console.log(routeId)
+
+    try {
+      await db("route_destination")
+        .where({ route_id: routeId, destination_id: destinationId })
+        .delete();
+      await db("destination").where({ id: destinationId }).delete();
+
+      const rowsRoute = await db
+        .select("*")
+        .from("route_destination")
+        .where({ route_id: routeId });
+
+      if (rowsRoute.length == 0) {
+        const employee = await db
+          .select("employee_id")
+          .from("route")
+          .where({ id: routeId });
+
+        await db("route").where({id:routeId}).delete();
+        await db("employee").where({id:employee[0].employee_id}).update({ status: "0" });
+      }
+
+      return res.status(200).json({
+        code: res.statusCode,
+        success: true,
+        message: "successfully delete destination of route",
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
 router.get("/destination", isAuthBusiness, async (req, res) => {
   const businessId = req.userId;
 
@@ -390,7 +544,7 @@ router.get("/destination", isAuthBusiness, async (req, res) => {
     const rowsDestination = await db
       .select("*")
       .from("destination")
-      .where({ business_id: businessId });
+      .where({ business_id: businessId, taken: 0 });
 
     return res.status(200).json({
       code: res.statusCode,

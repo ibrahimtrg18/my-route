@@ -12,13 +12,16 @@ const {
   createTableHistory,
 } = require("./config/schema");
 
-createTableBusiness();
-createTableEmployee();
-createTableBusinessEmployee();
-createTableRoute();
-createTableDestination();
-createTableRouteDestination();
-createTableHistory();
+(async function () {
+  await createTableBusiness();
+  await createTableEmployee();
+  await createTableBusinessEmployee();
+  await createTableRoute();
+  await createTableDestination();
+  await createTableRouteDestination();
+  await createTableHistory();
+  console.log("databases ready...")
+})();
 
 const PORT = process.env.PORT || 4000;
 

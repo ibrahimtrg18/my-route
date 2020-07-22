@@ -8,7 +8,7 @@ import {
   Divider,
 } from "./AddRoute.styles";
 import AddRouteForm from "../../components/AddRouteForm/AddRouteForm";
-import DestinationCard from "../../components/Destination/DestinationCard";
+import DestinationCard from "../../components/DestinationCard/DestinationCard";
 import EmployeeStandby from "../../components/EmployeeStandby/EmployeeStandby";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
@@ -34,7 +34,7 @@ const AddRoute = () => {
   };
 
   const selectEmployee = async ({ id }) => {
-    const data = { id, destination: selectedDestination };
+    const data = { employeeId: id, destination: selectedDestination };
     try {
       const response = await axios.post(
         `${SERVER_URL}/api/business/route`,
@@ -45,7 +45,7 @@ const AddRoute = () => {
           },
         }
       );
-      console.log(response.data);
+      window.location.reload();
     } catch (err) {
       console.error(err.response);
     }

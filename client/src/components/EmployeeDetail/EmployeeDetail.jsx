@@ -15,7 +15,6 @@ import {
 } from "./ExmployeeDetail.styles";
 
 const EmployeeDetail = (props) => {
-  console.log(props.employee);
   return (
     <EmployeeDetailContainer>
       <EmployeeContainer>

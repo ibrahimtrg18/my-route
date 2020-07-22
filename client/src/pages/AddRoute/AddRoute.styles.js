@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 export const AddRouteContainer = styled.div`
   background-color: ${(props) => props.theme.secondaryBackground};
   display: flex;
+  width: 100%;
+  height: 100%;
+  min-width: 100vw;
   min-height: 100vh;
-  height: auto;
 `;
 
 export const LeftSide = styled.div`

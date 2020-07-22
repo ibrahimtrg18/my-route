@@ -57,7 +57,7 @@ const LoginForm = () => {
             setLoading(false);
             history.push("/onprogress");
           } catch (err) {
-            console.log(err.response);
+            console.log(err);
             setMessage(err.response.data.message);
             setStatus(0);
             setLoading(false);

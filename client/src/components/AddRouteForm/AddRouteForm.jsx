@@ -30,7 +30,7 @@ const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
 
 const validationSchema = yup.object().shape({
   address: yup.string().required(),
-  phoneNumber: yup.string().required("number phone is a required field"),
+  phoneNumber: yup.string().required(),
   itemId: yup.string().required("ID item is a required field"),
   email: yup.string().email().required(),
 });
@@ -41,7 +41,7 @@ const mapContainerStyle = {
   marginBottom: "16px",
 };
 
-const defaultCenter = {
+const center = {
   lat: 3.565407,
   lng: 98.716225,
 };
@@ -51,18 +51,14 @@ const libraries = ["places"];
 const AddRouteForm = () => {
   const token = localStorage.getItem("token");
   const { isLoaded, loadError } = useLoadScript({
-    // googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
   });
-  const [markerLocation, setMarkerLocation] = useState(defaultCenter);
+  const [markerLocation, setMarkerLocation] = useState(center);
   const inputRef = useRef();
   const mapRef = useRef();
   const [address, setAddress] = useState(null);
   const [zipCode, setZipCode] = useState("");
-
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
 
   // init marker
   const onMapLoad = useCallback((map) => {
@@ -91,6 +87,10 @@ const AddRouteForm = () => {
   };
 
   useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
+  useEffect(() => {
     if (mapRef.current) {
       (async function () {
         try {
@@ -117,7 +117,7 @@ const AddRouteForm = () => {
           <Search panTo={panTo} />
           <GoogleMap
             mapContainerStyle={mapContainerStyle}
-            center={defaultCenter}
+            center={center}
             zoom={15}
             options={{
               disableDefaultUI: true,
@@ -160,7 +160,6 @@ const AddRouteForm = () => {
                 },
               }
             );
-            console.log(response.data);
             resetForm();
             window.location.reload();
           } catch (err) {
@@ -253,7 +252,7 @@ function Search({ panTo }) {
     clearSuggestions,
   } = usePlacesAutocomplete({
     requestOptions: {
-      location: { lat: () => defaultCenter.lat, lng: () => defaultCenter.lng },
+      location: { lat: () => center.lat, lng: () => center.lng },
       radius: 200 * 1000,
     },
   });

@@ -70,7 +70,7 @@ const EmployeeRegisterForm = () => {
             history.push("/employee");
             resetForm();
           } catch (err) {
-            console.log(err.response);
+            console.log(err);
             setMessage(err.response.data.message);
             setStatus(0);
           }
