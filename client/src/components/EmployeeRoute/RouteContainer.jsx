@@ -1,5 +1,8 @@
 import React from "react";
+<<<<<<< HEAD
 import {useHistory} from 'react-router-dom'
+=======
+>>>>>>> 3ac3965b0b44637231fbd6563d60068384030435
 import axios from "axios";
 import {
   CardRoute,
@@ -16,7 +19,10 @@ const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
 
 function RouteContainer({ destinations, routeId }) {
   const token = localStorage.getItem("token");
+<<<<<<< HEAD
   const history = useHistory();
+=======
+>>>>>>> 3ac3965b0b44637231fbd6563d60068384030435
 
   const handleClick = async (destinationId) => {
     try {
@@ -28,7 +34,11 @@ function RouteContainer({ destinations, routeId }) {
           },
         }
       );
+<<<<<<< HEAD
       window.location.reload();
+=======
+      console.log(response);
+>>>>>>> 3ac3965b0b44637231fbd6563d60068384030435
     } catch (err) {
       console.log(err);
     }
