@@ -1,12 +1,15 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
+const request = require("request");
+const { Client } = require("@googlemaps/google-maps-services-js");
 const db = require("../config/database");
 const router = express.Router();
 const { isAuthBusiness } = require("../middleware/auth");
+const client = new Client({});
 
 router.post("/register", async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   const {
     businessName,
     email,
@@ -431,6 +434,75 @@ router.post("/route", isAuthBusiness, async (req, res) => {
   }
 });
 
+router.get("/route/:routeId", async (req, res) => {
+  const { routeId } = req.params;
+  let results = {};
+
+  try {
+    const destination = await db
+      .select("destination_id")
+      .from("route_destination")
+      .where({ route_id: routeId });
+
+    const location = await db
+      .select("lat", "lng")
+      .from("destination")
+      .whereIn(
+        "id",
+        destination.map((dest) => dest.destination_id)
+      );
+
+    const r = await client.distancematrix({
+      params: {
+        origins: location.map((loc) => {
+          return {
+            lat: loc.lat,
+            lng: loc.lng,
+          };
+        }),
+        destinations: location.map((loc) => {
+          return {
+            lat: loc.lat,
+            lng: loc.lng,
+          };
+        }),
+        key: "AIzaSyCChhbB4AfFf8ay-Ms1J3FNTqMtsibweqE",
+      },
+      timeout: 1000,
+    });
+
+    r.data.rows.forEach((row, i) => {
+      let distanceValue = {};
+      row.elements.forEach((el, j) => {
+        distanceValue[(j + 10).toString(36).toUpperCase()] = el.distance.value;
+      });
+      results[(i + 10).toString(36).toUpperCase()] = distanceValue;
+    });
+
+    request.get(
+      "http://localhost:5000/findbestroute",
+      {
+        form: {
+          cities: "A, B, C",
+          start_city: "A",
+          distance_matrix: JSON.stringify(results),
+        },
+      },
+      function (error, response) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(response.body);
+        }
+      }
+    );
+
+    return res.send(results);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 router.put("/route/:routeId", isAuthBusiness, async (req, res) => {
   const businessId = req.userId;
   const { routeId } = req.params;
@@ -503,7 +575,7 @@ router.delete(
   isAuthBusiness,
   async (req, res) => {
     const { routeId, destinationId } = req.params;
-    console.log(routeId)
+    console.log(routeId);
 
     try {
       await db("route_destination")
@@ -522,8 +594,10 @@ router.delete(
           .from("route")
           .where({ id: routeId });
 
-        await db("route").where({id:routeId}).delete();
-        await db("employee").where({id:employee[0].employee_id}).update({ status: "0" });
+        await db("route").where({ id: routeId }).delete();
+        await db("employee")
+          .where({ id: employee[0].employee_id })
+          .update({ status: "0" });
       }
 
       return res.status(200).json({
