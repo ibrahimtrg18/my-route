@@ -10,6 +10,8 @@ import PrivateRoute from "./PrivateRoute";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
+import AdminLogin from "../pages/AdminLogin/AdminLogin";
+import AdminDashboard from "../pages/AdminDashboard/AdminDashboard";
 import OnProgress from "../pages/OnProgress/OnProgress";
 import History from "../pages/History/History";
 import Employee from "../pages/Employee/Employee";
@@ -30,9 +32,15 @@ const Routes = () => {
         />
         <PrivateRoute exact path="/employee" component={Employee} />
         <PrivateRoute exact path="/history" component={History} />
-        <PrivateRoute exact path="/destination/:routeId" component={Destination} />
+        <PrivateRoute
+          exact
+          path="/destination/:routeId"
+          component={Destination}
+        />
         <PrivateRoute exact path="/route/add" component={AddRoute} />
         <PrivateRoute exact path="/onprogress" component={OnProgress} />
+        <Route exact path="/admin/dashboard" component={AdminDashboard} />
+        <Route exact path="/admin" component={AdminLogin} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/" component={Home} />

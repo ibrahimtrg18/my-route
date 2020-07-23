@@ -16,15 +16,19 @@ const Navbar = (props) => {
         <span>My</span>route.
       </BrandContainer>
       <Menu>
-        {token ? (
-          <MenuItem>
-            <MenuLink
-              active={props.onprogress && props.onprogress}
-              to="/onprogress"
-            >
-              Dashboard
-            </MenuLink>
-          </MenuItem>
+        {token || props.adminLogin ? (
+          props.adminLogin ? (
+            <></>
+          ) : (
+            <MenuItem>
+              <MenuLink
+                active={props.onprogress && props.onprogress}
+                to="/onprogress"
+              >
+                Dashboard
+              </MenuLink>
+            </MenuItem>
+          )
         ) : (
           <>
             <MenuItem>

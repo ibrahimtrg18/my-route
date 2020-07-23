@@ -26,6 +26,7 @@ export const HeaderContainer = styled.div`
     margin-bottom: 16px;
   }
 `;
+
 export const Brand = styled(Link)`
   display: inline-block;
   text-decoration: none;
