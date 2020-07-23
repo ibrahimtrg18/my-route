@@ -35,30 +35,30 @@ const History = () => {
   const token = localStorage.getItem("token");
   const [date, setDate] = useState(new Date());
   const [employees] = useState([
+    // {
+    //   avatar: "../../assets/images/avatar.png",
+    //   name: "Ibrahim Tarigan",
+    //   customId: "AF1020DC3040",
+    //   date: "17 Mei 2020",
+    //   time: "09 : 30",
+    //   distance: 42,
+    // },
     {
-      avatar: "../../assets/images/avatar.png",
-      name: "Ibrahim Tarigan",
-      customId: "AF1020DC3040",
-      date: "17 Mei 2020",
-      time: "09 : 30",
-      distance: 42,
+      avatar: "../../assets/images/defaultavatar.png",
+      name: "Jonatan Prima Hutabarat",
+      customId: "k001",
+      date: "23 Juli 2020",
+      time: "18 : 00",
+      distance: 16308 /1000,
     },
-    {
-      avatar: "../../assets/images/avatar.png",
-      name: "Jonatan Prima",
-      customId: "AF1020DC1234",
-      date: "17 Mei 2020",
-      time: "09 : 30",
-      distance: 43,
-    },
-    {
-      avatar: "../../assets/images/avatar.png",
-      name: "Anggiat Pasaribu",
-      customId: "AF1020DC4321",
-      date: "17 Mei 2020",
-      time: "09 : 30",
-      distance: 44,
-    },
+    // {
+    //   avatar: "../../assets/images/avatar.png",
+    //   name: "Anggiat Pasaribu",
+    //   customId: "AF1020DC4321",
+    //   date: "17 Mei 2020",
+    //   time: "09 : 30",
+    //   distance: 44,
+    // },
   ]);
   const [employee, setEmployee] = useState({});
 
@@ -98,12 +98,12 @@ const History = () => {
                 active={employee.customId}
                 onClick={() => handleEmployeeClick(emp)}
               >
-                <EmployeeImg src={require("../../assets/images/avatar.png")} />
+                <EmployeeImg src={require("../../assets/images/defaultavatar.png")} />
                 <EmployeeName>{emp.name}</EmployeeName>
                 <EmployeeCustomId>{emp.customId}</EmployeeCustomId>
                 <EmployeeDate>{emp.date}</EmployeeDate>
                 <EmployeeTime>{emp.time}</EmployeeTime>
-                <EmployeeDistance>{emp.distance}KM</EmployeeDistance>
+                <EmployeeDistance>{emp.distance} KM</EmployeeDistance>
               </EmployeeContainer>
             );
           })}

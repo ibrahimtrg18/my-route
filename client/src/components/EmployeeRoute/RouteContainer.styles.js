@@ -31,12 +31,12 @@ export const Actions = styled.div`
 
 export const IconContainer = styled.div`
   background-color: ${(props) =>
-    !props.disabled ? props.theme.primaryColor : props.theme.tertiaryColor};
+    props.status ? props.theme.primaryColor : props.theme.tertiaryColor};
   align-self: center;
   border-radius: 8px;
   padding: 8px;
   margin-left: 8px;
-  cursor: ${(props) => (!props.disabled ? "pointer" : "not-allowed")};
+  cursor: "not-allowed";
   &:hover {
     background-color: ${(props) =>
       !props.disabled && props.theme.primaryDarkColor};

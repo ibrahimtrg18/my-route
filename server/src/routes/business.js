@@ -219,8 +219,6 @@ router.get("/location", isAuthBusiness, async (req, res) => {
   }
 });
 
-router.get("/history", isAuthBusiness, async (_req, _res) => {});
-
 router.get("/employee", isAuthBusiness, async (req, res) => {
   const businessId = req.userId;
 
@@ -513,14 +511,12 @@ router.get("/route/:routeId", isAuthBusiness, async (req, res) => {
           });
           // sortLocation.push(sortLocation[sortLocation.length - 1]);
         }
-        return res
-          .status(200)
-          .json({
-            results,
-            route: JSON.parse(response.body),
-            location,
-            locationSorted,
-          });
+        return res.status(200).json({
+          results,
+          route: JSON.parse(response.body),
+          location,
+          locationSorted,
+        });
       }
     );
   } catch (err) {
@@ -700,5 +696,7 @@ router.post("/destination", isAuthBusiness, async (req, res) => {
     });
   }
 });
+
+router.get("/history", isAuthBusiness, async (_req, _res) => {});
 
 module.exports = router;

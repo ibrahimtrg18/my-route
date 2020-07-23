@@ -1,5 +1,5 @@
 import React from "react";
-import {useHistory} from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 import {
   CardRoute,
@@ -46,7 +46,7 @@ function RouteContainer({ destinations, routeId }) {
             </Address>
           </div>
           <Actions>
-            <IconContainer disabled>
+            <IconContainer status={dest.status}>
               <Check width={18} height={18} />
             </IconContainer>
             <IconContainer onClick={() => handleClick(dest.id)}>

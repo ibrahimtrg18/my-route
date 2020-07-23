@@ -79,7 +79,7 @@ const EmployeeRoute = (props) => {
           </div>
         </EmployeeContainer>
         <MapContainer>
-          <Map destinations={destinations} locations={locations} />
+          {/* <Map destinations={destinations} locations={locations} /> */}
           <AddDestination
             to={`/destination/${
               props.employee.route && props.employee.route.id

@@ -23,6 +23,7 @@ export const EmployeeContainer = styled.div`
 `;
 
 export const Avatar = styled.img`
+  display: none;
   width: 56px;
   height: 56px;
   border-radius: 16px;

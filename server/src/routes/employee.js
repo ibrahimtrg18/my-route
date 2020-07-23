@@ -155,4 +155,101 @@ router.patch("/status", isAuthEmployee, async (req, res) => {
   }
 });
 
+router.get("/destination", isAuthEmployee, async (req, res) => {
+  const employeeId = req.userId;
+
+  try {
+    const routeId = await db
+      .select("id")
+      .from("route")
+      .where({ employee_id: employeeId });
+    const destinationsId = await db
+      .select("destination_id")
+      .from("route_destination")
+      .where({ route_id: routeId[0].id });
+    const destinations = await db
+      .select("*")
+      .from("destination")
+      .whereIn(
+        "id",
+        destinationsId.map((dest) => dest.destination_id)
+      );
+    return res.status(200).json({
+      code: res.statusCode,
+      success: true,
+      data: {
+        destination: destinations,
+      },
+      message: `found ${destinations.length}`,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send(err);
+  }
+});
+
+router.put(
+  "/destination/:destinationId/finish",
+  isAuthEmployee,
+  async (req, res) => {
+    const employeeId = req.userId;
+    const { destinationId } = req.params;
+
+    try {
+      const routeId = await db
+        .select("id")
+        .from("route")
+        .where({ employee_id: employeeId });
+
+      const destinationsId = await db
+        .select("destination_id")
+        .from("route_destination")
+        .where({ route_id: routeId[0].id });
+
+      const pass = destinationsId.find((dest) => {
+        return dest.destination_id == destinationId;
+      });
+
+      if (pass) {
+        await db("destination")
+          .where({ id: destinationId })
+          .update({ status: 1 });
+
+        const destinationStatus = await db
+          .select("status")
+          .from("destination")
+          .whereIn(
+            "id",
+            destinationsId.map((dest) => dest.destination_id)
+          );
+
+        const alldone = destinationStatus.find((dest) => dest.status == 0);
+
+        if (!alldone) {
+          await db("route")
+            .where({ employee_id: employeeId })
+            .update({ status: 1 });
+
+          await db("employee").where({ id: employeeId }).update({ status: 0 });
+        }
+
+        return res.status(200).json({
+          code: req.statusCode,
+          success: true,
+          message: "successfully change status destination",
+        });
+      } else {
+        return res.status(403).json({
+          code: req.statusCode,
+          success: false,
+          message: "its not your destination",
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      return res.status(500).send(err);
+    }
+  }
+);
+
 module.exports = router;

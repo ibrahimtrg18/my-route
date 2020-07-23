@@ -51,6 +51,7 @@ const OnProgress = () => {
             },
           }
         );
+        console.log(response.data);
         setEmployees(response.data.data.employees);
       } catch (err) {
         console.log(err);

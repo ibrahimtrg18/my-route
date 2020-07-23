@@ -100,7 +100,9 @@ function EmployeeList({ employees }) {
         {employees.map((emp) => {
           return (
             <EmployeeContainer key={emp.id}>
-              <EmployeeAvatar />
+              <EmployeeAvatar
+                src={require("../../assets/images/defaultavatar.png")}
+              />
               <div>
                 <EmployeeName>{emp.name}</EmployeeName>
                 <EmployeeCustomId>{emp.custom_id}</EmployeeCustomId>

@@ -11,7 +11,7 @@ const EmployeeHistory = (props) => {
   return (
     <EmployeeHistoryContainer>
       <EmployeeContainer>
-        <Avatar src={require("../../assets/images/avatar.png")} />
+        <Avatar />
         <div>
           <Name>{props.employee.name}</Name>
           <CustomId>{props.employee.customId}</CustomId>

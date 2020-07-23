@@ -118,7 +118,7 @@ export const EmployeeContainer = styled.div`
   align-items: center;
 `;
 
-export const EmployeeAvatar = styled.div`
+export const EmployeeAvatar = styled.img`
   width: 48px;
   height: 48px;
   max-width: 48px;

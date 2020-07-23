@@ -19,7 +19,7 @@ const EmployeeStandby = ({ employees, selectEmployee }) => {
       {employees.map((employee) => {
         return (
           <EmployeeContainer key={employee.id}>
-            <EmployeeImage></EmployeeImage>
+            <EmployeeImage src={require("../../assets/images/defaultavatar.png")}/>
             <div>
               <EmployeeName>{employee.name}</EmployeeName>
               <EmployeeCustomId>{employee.custom_id}</EmployeeCustomId>
