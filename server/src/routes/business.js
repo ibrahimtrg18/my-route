@@ -434,11 +434,18 @@ router.post("/route", isAuthBusiness, async (req, res) => {
   }
 });
 
-router.get("/route/:routeId", async (req, res) => {
+router.get("/route/:routeId", isAuthBusiness, async (req, res) => {
+  const businessId = req.userId;
   const { routeId } = req.params;
+  let locationSorted = [];
   let results = {};
 
   try {
+    const locationBusiness = await db
+      .select("lat", "lng")
+      .from("business")
+      .where({ id: businessId });
+
     const destination = await db
       .select("destination_id")
       .from("route_destination")
@@ -451,6 +458,8 @@ router.get("/route/:routeId", async (req, res) => {
         "id",
         destination.map((dest) => dest.destination_id)
       );
+
+    location.unshift(locationBusiness[0]);
 
     const r = await client.distancematrix({
       params: {
@@ -479,25 +488,41 @@ router.get("/route/:routeId", async (req, res) => {
       results[(i + 10).toString(36).toUpperCase()] = distanceValue;
     });
 
-    request.get(
+    await request.get(
       "http://localhost:5000/findbestroute",
       {
         form: {
-          cities: "A, B, C",
+          cities: Object.keys(results).join(","),
           start_city: "A",
           distance_matrix: JSON.stringify(results),
         },
       },
-      function (error, response) {
+      function (error, response, body) {
         if (error) {
           console.log(error);
         } else {
+          const route = JSON.parse(response.body);
           console.log(response.body);
+          let sortLocation = [];
+          location.forEach((loc, i) => {
+            sortLocation[route.route[i].charCodeAt(0) - 65] = {
+              lat: location[i].lat,
+              lng: location[i].lng,
+            };
+            return (locationSorted = sortLocation);
+          });
+          // sortLocation.push(sortLocation[sortLocation.length - 1]);
         }
+        return res
+          .status(200)
+          .json({
+            results,
+            route: JSON.parse(response.body),
+            location,
+            locationSorted,
+          });
       }
     );
-
-    return res.send(results);
   } catch (err) {
     console.log(err);
   }

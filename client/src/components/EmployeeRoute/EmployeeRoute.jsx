@@ -18,25 +18,50 @@ const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
 const EmployeeRoute = (props) => {
   const token = localStorage.getItem("token");
   const [destinations, setDestination] = useState([]);
+  const [locations, setLocations] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     (async function () {
-      try {
-        const response = await axios.get(
-          `${SERVER_URL}/api/business/employee/${props.employee.id}/route/${
-            props.employee.route && props.employee.route.id
-          }`,
-          {
-            headers: {
-              "x-token": token,
-            },
-          }
-        );
-        setDestination(response.data.data.destination);
-        setLoading(false);
-      } catch (err) {
-        console.error(err.response);
+      if (props.employee.route) {
+        try {
+          const response = await axios.get(
+            `${SERVER_URL}/api/business/employee/${props.employee.id}/route/${
+              props.employee.route && props.employee.route.id
+            }`,
+            {
+              headers: {
+                "x-token": token,
+              },
+            }
+          );
+          setDestination(response.data.data.destination);
+        } catch (err) {
+          console.error(err.response);
+        }
+      }
+    })();
+  }, [props.employee.id]);
+
+  useEffect(() => {
+    (async function () {
+      if (props.employee.route) {
+        try {
+          const response = await axios.get(
+            `${SERVER_URL}/api/business/route/${
+              props.employee.route && props.employee.route.id
+            }`,
+            {
+              headers: {
+                "x-token": token,
+              },
+            }
+          );
+          setLocations(response.data.locationSorted);
+          setLoading(false);
+        } catch (err) {
+          console.log(err);
+        }
       }
     })();
   }, [props.employee.id]);
@@ -54,7 +79,7 @@ const EmployeeRoute = (props) => {
           </div>
         </EmployeeContainer>
         <MapContainer>
-          <Map destinations={destinations} />
+          <Map destinations={destinations} locations={locations} />
           <AddDestination
             to={`/destination/${
               props.employee.route && props.employee.route.id

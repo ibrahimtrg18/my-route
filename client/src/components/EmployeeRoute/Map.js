@@ -25,11 +25,14 @@ const libraries = ["directions"];
 
 const google = window.google;
 
-function Map({ destinations }) {
+function Map({ destinations, locations }) {
   const token = localStorage.getItem("token");
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
+  });
+  const markersLocationSorted = locations.map((loc) => {
+    return { marker: { lat: loc.lat, lng: loc.lng } };
   });
   const markersLocation = destinations.map((dest) => {
     return { id: dest.id, marker: { lat: dest.lat, lng: dest.lng } };
@@ -61,6 +64,7 @@ function Map({ destinations }) {
 
   if (loadError) return "Errors!";
 
+  console.log(markersLocationSorted.length);
   return (
     <>
       {!isLoaded ? (
@@ -76,7 +80,11 @@ function Map({ destinations }) {
           onLoad={onMapLoad}
         >
           <MapDirectionsRenderer
-            places={markersLocation}
+            places={
+              markersLocationSorted.length > 3
+                ? markersLocationSorted
+                : markersLocation
+            }
             travelMode={google.maps.TravelMode.DRIVING}
             location={location}
           />
