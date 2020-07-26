@@ -64,7 +64,6 @@ function Map({ destinations, locations }) {
 
   if (loadError) return "Errors!";
 
-  console.log(markersLocationSorted.length);
   return (
     <>
       {!isLoaded ? (

@@ -473,7 +473,7 @@ router.get("/route/:routeId", isAuthBusiness, async (req, res) => {
             lng: loc.lng,
           };
         }),
-        key: "AIzaSyCChhbB4AfFf8ay-Ms1J3FNTqMtsibweqE",
+        key: process.env.GOOGLE_MAPS_API_KEY,
       },
       timeout: 1000,
     });

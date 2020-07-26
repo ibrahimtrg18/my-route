@@ -36,7 +36,7 @@ export const IconContainer = styled.div`
   border-radius: 8px;
   padding: 8px;
   margin-left: 8px;
-  cursor: "not-allowed";
+  cursor: ${props=>props.disabled ? "not-allowed" : "pointer"};
   &:hover {
     background-color: ${(props) =>
       !props.disabled && props.theme.primaryDarkColor};

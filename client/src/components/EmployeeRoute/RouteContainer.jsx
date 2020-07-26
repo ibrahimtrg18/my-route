@@ -46,10 +46,13 @@ function RouteContainer({ destinations, routeId }) {
             </Address>
           </div>
           <Actions>
-            <IconContainer status={dest.status}>
+            <IconContainer status={dest.status} disabled>
               <Check width={18} height={18} />
             </IconContainer>
-            <IconContainer onClick={() => handleClick(dest.id)}>
+            <IconContainer
+              status={dest.status}
+              onClick={() => handleClick(dest.id)}
+            >
               <Trash width={18} height={18} />
             </IconContainer>
           </Actions>
