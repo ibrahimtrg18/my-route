@@ -57,7 +57,11 @@ const EmployeeRoute = (props) => {
               },
             }
           );
-          setLocations(response.data.locationSorted);
+          if (response.data.locationSorted)
+            setLocations(response.data.locationSorted);
+          else {
+            setLocations(response.data.location);
+          }
           setLoading(false);
         } catch (err) {
           console.log(err);

@@ -496,27 +496,34 @@ router.get("/route/:routeId", isAuthBusiness, async (req, res) => {
         },
       },
       function (error, response, body) {
-        if (error) {
-          console.log(error);
-        } else {
-          const route = JSON.parse(response.body);
-          console.log(response.body);
-          let sortLocation = [];
-          location.forEach((loc, i) => {
-            sortLocation[route.route[i].charCodeAt(0) - 65] = {
-              lat: location[i].lat,
-              lng: location[i].lng,
-            };
-            return (locationSorted = sortLocation);
+        try {
+          if (error) {
+            console.log(error);
+          } else {
+            const route = JSON.parse(response.body);
+            console.log(response.body);
+            let sortLocation = [];
+            location.forEach((loc, i) => {
+              sortLocation[route.route[i].charCodeAt(0) - 65] = {
+                lat: location[i].lat,
+                lng: location[i].lng,
+              };
+              return (locationSorted = sortLocation);
+            });
+            // sortLocation.push(sortLocation[sortLocation.length - 1]);
+          }
+          return res.status(200).json({
+            results,
+            route: JSON.parse(response.body),
+            location,
+            locationSorted,
           });
-          // sortLocation.push(sortLocation[sortLocation.length - 1]);
+        } catch (err) {
+          console.log(err);
+          return res.status(200).json({
+            location,
+          });
         }
-        return res.status(200).json({
-          results,
-          route: JSON.parse(response.body),
-          location,
-          locationSorted,
-        });
       }
     );
   } catch (err) {
