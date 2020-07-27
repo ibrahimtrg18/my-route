@@ -29,6 +29,12 @@ const Employee = () => {
   const token = localStorage.getItem("token");
   const [employees, setEmployees] = useState([]);
   const [employee, setEmployee] = useState({});
+  const [filteredEmployees, setFilteredEmployees] = useState(employees);
+  const [search, setSearch] = useState("");
+
+  const handleEmployeeClick = (employee) => {
+    setEmployee(employee);
+  };
 
   useEffect(() => {
     (async function () {
@@ -44,13 +50,18 @@ const Employee = () => {
         return employee;
       });
       setEmployees(employees);
+      setFilteredEmployees(employees);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleEmployeeClick = (employee) => {
-    setEmployee(employee);
-  };
+  useEffect(() => {
+    setFilteredEmployees(
+      employees.filter(
+        (emp) => emp.name.toLowerCase().indexOf(search.toLowerCase()) !== -1
+      )
+    );
+  }, [search]);
 
   if (!token) {
     return <Redirect to="/login" />;
@@ -71,9 +82,14 @@ const Employee = () => {
             Add new employee <Add width={21} height={21} />
           </Button>
         </BannerContainer>
-        <Search type="text" placeholder="Search Courier..." />
+        <Search
+          type="text"
+          placeholder="Search Courier..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
         <EmployeeList>
-          {employees.map((emp) => {
+          {filteredEmployees.map((emp) => {
             return (
               <EmployeeCard
                 key={emp.id}

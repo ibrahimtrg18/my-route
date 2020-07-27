@@ -35,7 +35,7 @@ const OnProgress = () => {
   const handleEmployeeClick = (employee) => {
     setEmployee(employee);
   };
-  
+
   useEffect(() => {
     if (!token) history.push("/login");
   }, [token]);
@@ -78,9 +78,7 @@ const OnProgress = () => {
               <Menu onprogress={1} />
             </HeaderContainer>
             <BannerContainer>
-              <Banner
-                src={require("../../assets/images/onprogress.png")}
-              ></Banner>
+              <Banner src={require("../../assets/images/onprogress.png")} />
               <Button to="/route/add">
                 Add new route <Add width={21} height={21} />
               </Button>
