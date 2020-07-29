@@ -3,7 +3,6 @@ import axios from "axios";
 import {
   useLoadScript,
   GoogleMap,
-  Marker,
   DirectionsRenderer,
 } from "@react-google-maps/api";
 
@@ -25,19 +24,14 @@ const libraries = ["directions"];
 
 const google = window.google;
 
-function Map({ destinations, locations }) {
+function Map({ locations }) {
   const token = localStorage.getItem("token");
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
   });
-  const markersLocationSorted = locations.map((loc) => {
-    return { marker: { lat: loc.lat, lng: loc.lng } };
-  });
-  const markersLocation = destinations.map((dest) => {
-    return { id: dest.id, marker: { lat: dest.lat, lng: dest.lng } };
-  });
-  const [location, setLocation] = useState(null);
+  const [businessLocation, setBusinessLocation] = useState(null);
+  const [places, setPlaces] = useState([]);
   const mapRef = useRef();
 
   const onMapLoad = useCallback((map) => {
@@ -55,12 +49,21 @@ function Map({ destinations, locations }) {
             },
           }
         );
-        setLocation(response.data.data.location);
+        setBusinessLocation(response.data.data.location);
+        locations.unshift(businessLocation);
       } catch (err) {
         console.log(err);
       }
     })();
   }, []);
+
+  useEffect(() => {
+    setPlaces(
+      locations.map((loc) => {
+        return { marker: { lat: loc.lat, lng: loc.lng } };
+      })
+    );
+  }, [locations]);
 
   if (loadError) return "Errors!";
 
@@ -79,13 +82,8 @@ function Map({ destinations, locations }) {
           onLoad={onMapLoad}
         >
           <MapDirectionsRenderer
-            places={
-              markersLocationSorted.length > 3
-                ? markersLocationSorted
-                : markersLocation
-            }
+            places={places}
             travelMode={google.maps.TravelMode.DRIVING}
-            location={location}
           />
         </GoogleMap>
       )}
@@ -93,47 +91,45 @@ function Map({ destinations, locations }) {
   );
 }
 
-function MapDirectionsRenderer(props) {
+function MapDirectionsRenderer({ places, travelMode }) {
   const [directions, setDestination] = useState(null);
   const [error, setError] = useState(null);
-  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      const { places, travelMode, location } = props;
+    if (places.length > 0)
+      try {
+        const waypoints = places.map((p) => ({
+          location: { lat: p.marker.lat, lng: p.marker.lng },
+          stopover: true,
+        }));
+        const origin = waypoints.shift().location;
+        const destination = waypoints.pop().location;
 
-      const waypoints = places.map((p) => ({
-        location: { lat: p.marker.lat, lng: p.marker.lng },
-        stopover: true,
-      }));
-      // const origin = waypoints.shift().location;
-      const destination = waypoints.pop().location;
-
-      const directionsService = new google.maps.DirectionsService();
-      directionsService.route(
-        {
-          origin: location,
-          destination: destination,
-          travelMode: travelMode,
-          waypoints: waypoints,
-        },
-        (result, status) => {
-          if (status === google.maps.DirectionsStatus.OK) {
-            setDestination(result);
-          } else {
-            setError(result);
+        const directionsService = new google.maps.DirectionsService();
+        directionsService.route(
+          {
+            origin: origin,
+            destination: destination,
+            travelMode: travelMode,
+            waypoints: waypoints,
+          },
+          (response, status) => {
+            if (status === google.maps.DirectionsStatus.OK) {
+              setDestination(response);
+            } else {
+              setError(response);
+            }
           }
-        }
-      );
-    } catch (err) {
-      console.log(err);
-    }
-  }, [props.places]);
+        );
+      } catch (err) {
+        console.log(err);
+      }
+  }, [places]);
 
   if (directions) {
     return directions && <DirectionsRenderer directions={directions} />;
   } else {
-    return <div>Error!</div>;
+    return <div>{error}</div>;
   }
 }
 

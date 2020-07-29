@@ -179,7 +179,7 @@ router.put("/settings", isAuthBusiness, async (req, res) => {
     } else {
       return res.status(409).json({
         code: res.statusCode,
-        successs: false,
+        success: false,
         message: "email already exist",
       });
     }
@@ -478,10 +478,12 @@ router.get("/route/:routeId", isAuthBusiness, async (req, res) => {
       timeout: 1000,
     });
 
+    var distanceTotal = 0;
     r.data.rows.forEach((row, i) => {
       let distanceValue = {};
       row.elements.forEach((el, j) => {
         distanceValue[(j + 10).toString(36).toUpperCase()] = el.distance.value;
+        if (i === 0) distanceTotal += distanceTotal + el.distance.value;
       });
       results[(i + 10).toString(36).toUpperCase()] = distanceValue;
     });
@@ -500,8 +502,7 @@ router.get("/route/:routeId", isAuthBusiness, async (req, res) => {
           if (error) {
             console.log(error);
           } else {
-            const route = JSON.parse(response.body);
-            console.log(response.body);
+            var route = JSON.parse(response.body);
             let sortLocation = [];
             location.forEach((loc, i) => {
               sortLocation[route.route[i].charCodeAt(0) - 65] = {
@@ -513,6 +514,7 @@ router.get("/route/:routeId", isAuthBusiness, async (req, res) => {
             // sortLocation.push(sortLocation[sortLocation.length - 1]);
           }
           return res.status(200).json({
+            distanceTotal: route.total_distance,
             results,
             route: JSON.parse(response.body),
             location,
@@ -521,6 +523,7 @@ router.get("/route/:routeId", isAuthBusiness, async (req, res) => {
         } catch (err) {
           console.log(err);
           return res.status(200).json({
+            distanceTotal,
             location,
           });
         }

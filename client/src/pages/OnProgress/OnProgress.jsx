@@ -101,7 +101,7 @@ const OnProgress = () => {
                       )}
                     </Date>
                     <Time>
-                      {moment(emp.employee.route.created_at).format("hh:mm")}
+                      {moment(emp.employee.route.created_at).format("HH:mm")}
                     </Time>
                     <Distance>{emp.employee.total_distance} KM</Distance>
                   </Employee>
