@@ -168,6 +168,11 @@ module.exports = {
           return db.schema.createTable("history", (table) => {
             table.increments("id").primary();
             table
+              .integer("employee_id")
+              .unsigned()
+              .references("id")
+              .inTable("employee");
+            table
               .integer("route_id")
               .unsigned()
               .references("id")

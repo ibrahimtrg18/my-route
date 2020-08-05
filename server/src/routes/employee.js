@@ -170,6 +170,7 @@ router.get("/destination", isAuthEmployee, async (req, res) => {
     const destinations = await db
       .select("*")
       .from("destination")
+      .where({ status: 0 })
       .whereIn(
         "id",
         destinationsId.map((dest) => dest.destination_id)
@@ -206,11 +207,11 @@ router.put(
         .from("route_destination")
         .where({ route_id: routeId[0].id });
 
-      const pass = destinationsId.find((dest) => {
+      const fit = destinationsId.find((dest) => {
         return dest.destination_id == destinationId;
       });
 
-      if (pass) {
+      if (fit) {
         await db("destination")
           .where({ id: destinationId })
           .update({ status: 1 });
@@ -223,24 +224,46 @@ router.put(
             destinationsId.map((dest) => dest.destination_id)
           );
 
-        const alldone = destinationStatus.find((dest) => dest.status == 0);
+        const isThereLeft = destinationStatus.find((dest) => dest.status === 0);
 
-        if (!alldone) {
+        if (!isThereLeft) {
           await db("route")
             .where({ employee_id: employeeId })
             .update({ status: 1 });
 
           await db("employee").where({ id: employeeId }).update({ status: 0 });
+
+          const rowsHistoryRoutesId = await db
+            .select("route_id")
+            .from("history")
+            .where({ employee_id: employeeId });
+
+          const alreadyInHistory = await rowsHistoryRoutesId.find(
+            (route) => route.route_id === routeId[0].id
+          );
+
+          if (!alreadyInHistory) {
+            await db("history").insert({
+              employee_id: employeeId,
+              route_id: routeId[0].id,
+            });
+          } else {
+            return res.status(205).json({
+              code: res.statusCode,
+              success: true,
+              message: "refresh please...",
+            });
+          }
         }
 
         return res.status(200).json({
-          code: req.statusCode,
+          code: res.statusCode,
           success: true,
           message: "successfully change status destination",
         });
       } else {
         return res.status(403).json({
-          code: req.statusCode,
+          code: res.statusCode,
           success: false,
           message: "its not your destination",
         });
@@ -251,5 +274,21 @@ router.put(
     }
   }
 );
+
+router.get("/route/:routeId", isAuthEmployee, async (req, res) => {});
+
+router.get("/history", isAuthEmployee, async (req, res) => {
+  const employeeId = req.userId;
+
+  const rows = await db
+    .select("history.id", "route.id as route_id", "history.created_at")
+    .from("history")
+    .where("history.employee_id", employeeId)
+    .leftJoin("route", "history.route_id", "route.id");
+
+  return res.status(200).json({
+    data: rows,
+  });
+});
 
 module.exports = router;
