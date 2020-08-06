@@ -11,7 +11,8 @@ export const NavbarContainer = styled.div`
   top: 0;
   padding: 0 128px;
   font-family: "Poppins", sans-serif;
-  margin-bottom: 21px;
+  margin-bottom: ${(props) =>
+    props.mb !== undefined ? `${props.mb}px` : "21px"};
   box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.1);
   @media (max-width: 600px) {
     padding: 0 8px;

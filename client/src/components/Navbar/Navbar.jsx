@@ -11,7 +11,7 @@ const Navbar = (props) => {
   const token = localStorage.getItem("token");
 
   return (
-    <NavbarContainer>
+    <NavbarContainer mb={props.mb}>
       <BrandContainer>
         <span>My</span>route.
       </BrandContainer>

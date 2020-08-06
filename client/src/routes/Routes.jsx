@@ -12,6 +12,7 @@ import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import AdminLogin from "../pages/AdminLogin/AdminLogin";
 import AdminDashboard from "../pages/AdminDashboard/AdminDashboard";
+import Order from "../pages/Order/Order";
 import OnProgress from "../pages/OnProgress/OnProgress";
 import History from "../pages/History/History";
 import Employee from "../pages/Employee/Employee";
@@ -39,6 +40,7 @@ const Routes = () => {
         />
         <PrivateRoute exact path="/route/add" component={AddRoute} />
         <PrivateRoute exact path="/onprogress" component={OnProgress} />
+        <Route exact path="/order/:orderId" component={Order} />
         <Route exact path="/admin/dashboard" component={AdminDashboard} />
         <Route exact path="/admin" component={AdminLogin} />
         <Route exact path="/register" component={Register} />

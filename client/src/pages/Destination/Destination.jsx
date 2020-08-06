@@ -45,7 +45,7 @@ const Destination = (props) => {
         }
       );
       console.log(response);
-      history.push("/onprogress")
+      history.push("/onprogress");
     } catch (err) {
       console.error(err.response);
     }
