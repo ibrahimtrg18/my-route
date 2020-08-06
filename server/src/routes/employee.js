@@ -1,8 +1,11 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const request = require("request");
 const db = require("../config/database");
 const router = express.Router();
+const { Client } = require("@googlemaps/google-maps-services-js");
 const { isAuthEmployee } = require("../middleware/auth");
+const client = new Client({});
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -275,7 +278,121 @@ router.put(
   }
 );
 
-router.get("/route/:routeId", isAuthEmployee, async (req, res) => {});
+router.get("/route/:routeId", isAuthEmployee, async (req, res) => {
+  const employeeId = req.userId;
+  const { routeId } = req.params;
+  let locationSorted = [];
+  let results = {};
+
+  try {
+    const rowsEmployee = await db
+      .select("lat", "lng")
+      .from("employee")
+      .where({ id: employeeId });
+
+    const locationEmployee =
+      rowsEmployee[0].lat && rowsEmployee[0].lng ? rowsEmployee : false;
+
+    const destination = await db
+      .select("destination_id")
+      .from("route_destination")
+      .where({ route_id: routeId });
+
+    const location = await db
+      .select("lat", "lng")
+      .from("destination")
+      .whereIn(
+        "id",
+        destination.map((dest) => dest.destination_id)
+      );
+
+    const rowsRouteBusinessId = await db
+      .select("business_id")
+      .from("route")
+      .where({ id: routeId });
+
+    const locationBusiness = await db
+      .select("lat", "lng")
+      .from("business")
+      .where({ id: rowsRouteBusinessId[0].business_id });
+
+    location.unshift(locationEmployee[0] || locationBusiness[0]);
+
+    const r = await client.distancematrix({
+      params: {
+        origins: location.map((loc) => {
+          return {
+            lat: loc.lat,
+            lng: loc.lng,
+          };
+        }),
+        destinations: location.map((loc) => {
+          return {
+            lat: loc.lat,
+            lng: loc.lng,
+          };
+        }),
+        key: process.env.GOOGLE_MAPS_API_KEY,
+      },
+      timeout: 1000,
+    });
+
+    var distanceTotal = 0;
+    r.data.rows.forEach((row, i) => {
+      let distanceValue = {};
+      row.elements.forEach((el, j) => {
+        distanceValue[(j + 10).toString(36).toUpperCase()] = el.distance.value;
+        if (i === 0) distanceTotal += distanceTotal + el.distance.value;
+      });
+      results[(i + 10).toString(36).toUpperCase()] = distanceValue;
+    });
+
+    await request.get(
+      "http://localhost:5000/findbestroute",
+      {
+        form: {
+          cities: Object.keys(results).join(","),
+          start_city: "A",
+          distance_matrix: JSON.stringify(results),
+        },
+      },
+      function (error, response, body) {
+        try {
+          if (error) {
+            console.log(error);
+          } else {
+            var route = JSON.parse(response.body);
+            let sortLocation = [];
+            location.forEach((loc, i) => {
+              sortLocation[route.route[i].charCodeAt(0) - 65] = {
+                lat: location[i].lat,
+                lng: location[i].lng,
+              };
+              return (locationSorted = sortLocation);
+            });
+            // sortLocation.push(sortLocation[sortLocation.length - 1]);
+          }
+          return res.status(200).json({
+            distanceTotal: route.total_distance,
+            results,
+            route: JSON.parse(response.body),
+            location,
+            locationSorted,
+          });
+        } catch (err) {
+          console.log(err);
+          return res.status(200).json({
+            distanceTotal,
+            location,
+          });
+        }
+      }
+    );
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send(err);
+  }
+});
 
 router.get("/history", isAuthEmployee, async (req, res) => {
   const employeeId = req.userId;
