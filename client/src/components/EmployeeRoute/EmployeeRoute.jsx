@@ -9,6 +9,7 @@ import {
   CustomId,
   MapContainer,
   AddDestination,
+  DistanceTotal,
 } from "./EmployeeRoute.styles";
 import Map from "./Map";
 import RouteContainer from "./RouteContainer";
@@ -17,6 +18,7 @@ const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
 
 const EmployeeRoute = (props) => {
   const token = localStorage.getItem("token");
+  const [distanceTotal, setDistanceTotal] = useState(0);
   const [destinations, setDestination] = useState([]);
   const [locations, setLocations] = useState([]);
   const [isLoading, setLoading] = useState(true);
@@ -57,10 +59,12 @@ const EmployeeRoute = (props) => {
               },
             }
           );
-          if (response.data.locationSorted)
+          if (response.data.locationSorted) {
             setLocations(response.data.locationSorted);
-          else {
+            setDistanceTotal(response.data.distanceTotal / 1000);
+          } else {
             setLocations(response.data.location);
+            setDistanceTotal(response.data.distanceTotal / 1000);
           }
           setLoading(false);
         } catch (err) {
@@ -92,6 +96,7 @@ const EmployeeRoute = (props) => {
             Add New Destination
           </AddDestination>
         </MapContainer>
+        <DistanceTotal>{distanceTotal} KM</DistanceTotal>
         <RouteContainer
           destinations={destinations}
           routeId={props.employee.route.id}

@@ -66,3 +66,10 @@ export const AddDestination = styled(Link)`
     text-decoration: underline;
   }
 `;
+
+export const DistanceTotal = styled.div`
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  color: ${(props) => props.theme.secondaryColor};
+`;

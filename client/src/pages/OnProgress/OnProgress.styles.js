@@ -154,3 +154,12 @@ export const Distance = styled.div`
   font-size: 14;
   font-weight: 400;
 `;
+
+export const Destination = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & > svg {
+    margin-right: 2px;
+  }
+`;

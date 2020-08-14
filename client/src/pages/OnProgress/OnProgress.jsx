@@ -19,9 +19,11 @@ import {
   Date,
   Time,
   Distance,
+  Destination,
 } from "./OnProgress.styles";
 import EmployeeRoute from "../../components/EmployeeRoute/EmployeeRoute";
 import Menu from "../../components/Menu/Menu";
+import { ReactComponent as PinIcon } from "../../assets/icons/pin.svg";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
 
@@ -85,6 +87,7 @@ const OnProgress = () => {
             </BannerContainer>
             <EmployeeList>
               {employees.map((emp) => {
+                console.log(emp);
                 return (
                   <Employee
                     key={emp.employee.id}
@@ -103,7 +106,10 @@ const OnProgress = () => {
                     <Time>
                       {moment(emp.employee.route.created_at).format("HH:mm")}
                     </Time>
-                    <Distance>{emp.employee.total_distance} KM</Distance>
+                    <Destination>
+                      <PinIcon width={14} height={14} />
+                      {emp.employee.route.destination.length}
+                    </Destination>
                   </Employee>
                 );
               })}

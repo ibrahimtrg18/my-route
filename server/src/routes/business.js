@@ -369,11 +369,23 @@ router.get("/employee/onway", isAuthBusiness, async (req, res) => {
         const route = await db
           .select("*")
           .from("route")
-          .where({ employee_id: emp.id });
+          .where({ employee_id: emp.id })
+          .andWhere({ status: 0 });
+        const destinationIds = await db
+          .select("destination_id")
+          .from("route_destination")
+          .where({ route_id: route[0].id });
+        const destination = await db
+          .select("*")
+          .from("destination")
+          .whereIn(
+            "id",
+            destinationIds.map((dest) => dest.destination_id)
+          );
         return {
           employee: {
             ...employee,
-            route: route[0],
+            route: { ...route[0], destination: destination },
           },
         };
       })

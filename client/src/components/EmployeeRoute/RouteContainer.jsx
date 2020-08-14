@@ -4,6 +4,7 @@ import axios from "axios";
 import {
   CardRoute,
   IdItem,
+  AddressContainer,
   Address,
   Actions,
   IconContainer,
@@ -40,10 +41,10 @@ function RouteContainer({ destinations, routeId }) {
         <CardRoute key={dest.id}>
           <div>
             <IdItem>ID ({dest.order_id ? dest.order_id : "-"})</IdItem>
-            <Address>
-              <Pin width={18} height={18} />
-              {dest.order_address}
-            </Address>
+            <AddressContainer>
+              <Pin width={18} height={18} style={{ flex: "0.05" }} />
+              <Address>{dest.order_address}</Address>
+            </AddressContainer>
           </div>
           <Actions>
             <IconContainer status={dest.status} disabled>

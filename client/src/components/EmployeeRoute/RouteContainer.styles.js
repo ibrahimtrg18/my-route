@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const CardRoute = styled.div`
   display: flex;
   padding: 8px;
-  border-bottom: solid 1px #e5e5e5;
+  margin-top: 16px;
+  border-top: solid 1px #e5e5e5;
 `;
 
 export const IdItem = styled.div`
@@ -13,7 +14,7 @@ export const IdItem = styled.div`
   text-transform: uppercase;
 `;
 
-export const Address = styled.div`
+export const AddressContainer = styled.div`
   font-size: 14px;
   font-weight: 400;
   display: flex;
@@ -21,6 +22,10 @@ export const Address = styled.div`
   & > svg {
     margin-right: 8px;
   }
+`;
+
+export const Address = styled.p`
+  flex: 0.95;
 `;
 
 export const Actions = styled.div`
@@ -36,7 +41,7 @@ export const IconContainer = styled.div`
   border-radius: 8px;
   padding: 8px;
   margin-left: 8px;
-  cursor: ${props=>props.disabled ? "not-allowed" : "pointer"};
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
   &:hover {
     background-color: ${(props) =>
       !props.disabled && props.theme.primaryDarkColor};

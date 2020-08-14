@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import {
   AdminLoginContainer,
   HeaderContainer,
@@ -12,6 +13,8 @@ import {
 import Navbar from "../../components/Navbar/Navbar";
 
 const AdminLogin = () => {
+  const history = useHistory();
+
   return (
     <>
       <Navbar adminLogin={1} />
@@ -29,7 +32,9 @@ const AdminLogin = () => {
             Password
             <Input />
           </Label>
-          <Button primary>Login</Button>
+          <Button primary onClick={() => history.push("/admin/dashboard")}>
+            Login
+          </Button>
         </Form>
       </AdminLoginContainer>
     </>

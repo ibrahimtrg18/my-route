@@ -165,27 +165,40 @@ router.get("/destination", isAuthEmployee, async (req, res) => {
     const routeId = await db
       .select("id")
       .from("route")
-      .where({ employee_id: employeeId });
-    const destinationsId = await db
-      .select("destination_id")
-      .from("route_destination")
-      .where({ route_id: routeId[0].id });
-    const destinations = await db
-      .select("*")
-      .from("destination")
-      .where({ status: 0 })
-      .whereIn(
-        "id",
-        destinationsId.map((dest) => dest.destination_id)
-      );
-    return res.status(200).json({
-      code: res.statusCode,
-      success: true,
-      data: {
-        destination: destinations,
-      },
-      message: `found ${destinations.length}`,
-    });
+      .where({ employee_id: employeeId, status: 0 });
+    if (routeId.length > 0) {
+      const destinationsId = await db
+        .select("destination_id")
+        .from("route_destination")
+        .where({ route_id: routeId[0].id });
+      const destinations = await db
+        .select("*")
+        .from("destination")
+        .where({ status: 0 })
+        .whereIn(
+          "id",
+          destinationsId.map((dest) => dest.destination_id)
+        );
+      return res.status(200).json({
+        code: res.statusCode,
+        success: true,
+        data: {
+          routeId: routeId[0].id,
+          destination: destinations,
+        },
+        message: `found ${destinations.length}`,
+      });
+    } else {
+      return res.status(204).json({
+        code: res.statusCode,
+        success: true,
+        data: {
+          routeId: null,
+          destination: [],
+        },
+        message: `you status is standby`,
+      });
+    }
   } catch (err) {
     console.log(err);
     return res.status(500).send(err);
@@ -215,7 +228,7 @@ router.put(
       });
 
       if (fit) {
-        await db("destination")
+        const totalDestination = await db("destination")
           .where({ id: destinationId })
           .update({ status: 1 });
 
@@ -226,6 +239,8 @@ router.put(
             "id",
             destinationsId.map((dest) => dest.destination_id)
           );
+
+        console.log(totalDestination);
 
         const isThereLeft = destinationStatus.find((dest) => dest.status === 0);
 
@@ -277,6 +292,32 @@ router.put(
     }
   }
 );
+
+router.get("/route", isAuthEmployee, async (req, res) => {
+  const employeeId = req.userId;
+
+  try {
+    const routeId = await db
+      .select("id")
+      .from("route")
+      .where({ employee_id: employeeId });
+    if (routeId.length > 0) {
+      return res.status().json({ code: res.statusCode });
+    } else {
+      return res.status(204).json({
+        code: res.statusCode,
+        success: true,
+        data: {
+          routeId: null,
+        },
+        // message: ""
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send(err);
+  }
+});
 
 router.get("/route/:routeId", isAuthEmployee, async (req, res) => {
   const employeeId = req.userId;
@@ -408,4 +449,21 @@ router.get("/history", isAuthEmployee, async (req, res) => {
   });
 });
 
+router.put("/location", isAuthEmployee, async (req, res) => {
+  const employeeId = req.userId;
+  const { lat, lng } = req.body;
+
+  try {
+    await db("employee").where({ id: employeeId }).update({ lat, lng });
+
+    return res.status(200).json({
+      code: res.statusCode,
+      success: true,
+      message: "successfully change coordinate employee",
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send(err);
+  }
+});
 module.exports = router;
