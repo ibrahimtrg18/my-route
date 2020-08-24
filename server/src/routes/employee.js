@@ -466,4 +466,5 @@ router.put("/location", isAuthEmployee, async (req, res) => {
     return res.status(500).send(err);
   }
 });
+
 module.exports = router;

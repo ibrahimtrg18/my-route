@@ -22,6 +22,8 @@ import {
 import Menu from "../../components/Menu/Menu";
 import EmployeeDetail from "../../components/EmployeeDetail/EmployeeDetail";
 import { ReactComponent as Add } from "../../assets/icons/add-circle.svg";
+import { ReactComponent as Direction } from "../../assets/icons/direction.svg";
+import { ReactComponent as Pin } from "../../assets/icons/pin.svg";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
 
@@ -49,6 +51,7 @@ const Employee = () => {
           .join(" ");
         return employee;
       });
+      console.log(response.data);
       setEmployees(employees);
       setFilteredEmployees(employees);
     })();
@@ -104,8 +107,14 @@ const Employee = () => {
                   <span></span>
                   {emp.status === 0 ? "Standby" : "On Way"}
                 </Status>
-                <TotalRoute>{emp.total_route} route</TotalRoute>
-                <TotalDistance>{emp.total_distance}KM</TotalDistance>
+                <TotalRoute>
+                  <Direction width={14} width={14} />
+                  {emp.allRoute.length}
+                </TotalRoute>
+                <TotalDistance>
+                  <Pin width={12} width={12} />
+                  {emp.allDestination.length}
+                </TotalDistance>
               </EmployeeCard>
             );
           })}

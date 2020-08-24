@@ -236,15 +236,53 @@ router.get("/employee", isAuthBusiness, async (req, res) => {
           return employee.employee_id;
         })
       );
+
+    // const employees = await db
+    //   .select("*", "employee.id as id")
+    //   .from("employee")
+    //   .crossJoin("route", "employee.id", "route.employee_id")
+    //   .leftJoin("route_destination", "route.id", "route_destination.route_id");
+
+    const employee = await Promise.all(
+      rowsEmployees.map(async (row) => {
+        const routeByEmployee = await db
+          .select("*")
+          .from("route")
+          .where({ employee_id: row.id });
+        const routeOfDestinationByEmployee = await db
+          .select("*")
+          .from("route_destination")
+          .whereIn(
+            "route_id",
+            routeByEmployee.map((route) => route.id)
+          );
+        const destinationByEmployee = await Promise.all(
+          routeOfDestinationByEmployee.map(
+            async (row) =>
+              await db
+                .select("*")
+                .from("destination")
+                .where({ id: row.destination_id })
+          )
+        );
+        return {
+          ...row,
+          allRoute: routeByEmployee,
+          allDestination: destinationByEmployee,
+        };
+      })
+    );
+
     return res.status(200).json({
       code: res.statusCode,
       success: true,
       data: {
-        employee: rowsEmployees,
+        employee: employee,
       },
-      message: `Found employee ${rowsEmployees.length}`,
+      message: `Found employee ${employee.length}`,
     });
   } catch (err) {
+    console.log(err);
     return res.status(500).json({
       code: res.statusCode,
       success: false,

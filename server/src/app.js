@@ -2,6 +2,7 @@ require("dotenv").config();
 const app = require("express")();
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const PORT = process.env.PORT || 4000;
 const {
   createTableBusiness,
   createTableBusinessEmployee,
@@ -20,15 +21,13 @@ const {
   await createTableDestination();
   await createTableRouteDestination();
   await createTableHistory();
-  console.log("databases ready...")
+  console.log("databases ready...");
+
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.json());
+  app.use(cors());
+
+  app.use("/", require("./routes/index"));
+
+  app.listen(PORT, () => console.log(`Server is running at ${PORT}`));
 })();
-
-const PORT = process.env.PORT || 4000;
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(cors());
-
-app.use("/", require("./routes/index"));
-
-app.listen(PORT, () => console.log(`Server is running at ${PORT}`));

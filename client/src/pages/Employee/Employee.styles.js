@@ -167,6 +167,20 @@ export const Status = styled.div`
   }
 `;
 
-export const TotalRoute = styled.div``;
+export const TotalRoute = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  & > svg {
+    margin-right: 8px;
+  }
+`;
 
-export const TotalDistance = styled.div``;
+export const TotalDistance = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  & > svg {
+    margin-right: 8px;
+  }
+`;
